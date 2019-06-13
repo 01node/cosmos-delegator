@@ -128,7 +128,7 @@ export default {
     return {
       bucketType: null,
       selectedValidators: [],
-      selectNew: true,
+      selectNew: false,
       ledger: false
     };
   },

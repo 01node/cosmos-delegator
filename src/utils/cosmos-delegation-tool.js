@@ -23,9 +23,9 @@ import {
 import axios from 'axios';
 import Big from 'big.js';
 import secp256k1 from 'secp256k1';
-import txs from './iris-txs';
+import txs from './cosmos-txs';
 
-const defaultHrp = 'iaa';
+const defaultHrp = 'cosmos';
 
 const IrisDelegatorTool = function() {
   // eslint-disable-next-line camelcase
@@ -184,7 +184,6 @@ IrisDelegatorTool.prototype.retrieveAddress = async function(account, index) {
   const pk = await this.app.publicKey(path);
 
   if (pk.return_code !== 0x9000) {
-
     if(pk.return_code === 26628) {
       this.lastError = 'Ledger device is in idle mode. Please unlock it.';
       throw new Error('Ledger device is in idle mode. Please unlock it.');
@@ -254,11 +253,15 @@ IrisDelegatorTool.prototype.getAccountInfo = async function(addr) {
     r => {
       try {
         if (typeof r.data !== 'undefined') {
-          txContext.sequence = Number(r.data.sequence).toString();
-          txContext.accountNumber = Number(r.data.account_number).toString();
+          txContext.sequence = Number(r.data.value.sequence).toString();
+          txContext.accountNumber = Number(r.data.value.account_number).toString();
 
-          if (r.data.coins !== null) {
-            txContext.balanceIris = Number(r.data.coins[0].replace('iris',''));
+          if (r.data.value.coins !== null) {
+            let coins = r.data.value.coins.reduce((acc,it) => {
+              return it.denom === 'uatom' ? acc + parseInt(it.amount) : acc;
+            }, 0);
+
+            txContext.balanceIris = Number(coins / 1000000);
           }
         }
       } catch (e) {

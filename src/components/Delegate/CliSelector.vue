@@ -2,13 +2,13 @@
   <div class="col-12 col-md-4">
     <div class="card" @click="selectMethod('cli')">
       <div class="card-header d-flex justify-content-between">
-        <h6 class="category-social"><i class="fas fa-terminal"></i> Delegate with IRISCLI</h6>
+        <h6 class="category-social"><i class="fas fa-terminal"></i> Delegate with gaiacli</h6>
         <a href="#" class="btn btn-round btn-link p-0 m-0">
           <i class="fas fa-lg fa-question-circle"></i>
         </a>
       </div>
       <div class="card-body text-center py-4 px-5">
-        <img src="https://www.irisnet.org/dist/irisnet_logo.png?4386a8f8710c9076ff3bb63fc78ef4e7" />
+        <img src="https://cosmos.network/img/cosmos-wordmark.6cbfcad2.svg" />
       </div>
     </div>
   </div>

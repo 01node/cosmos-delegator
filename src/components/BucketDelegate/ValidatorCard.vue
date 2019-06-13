@@ -11,7 +11,7 @@
           <hr class="line-success" />
           <ul>
             <li><span v-text="commissionRate"></span>% commision</li>
-            <li><span v-text="bondedTokens"></span> IRIS delegated</li>
+            <li><span v-text="bondedTokens"></span> {{ DENOM }} delegated</li>
           </ul>
         </div>
       </div>
@@ -22,10 +22,15 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { formatNumber } from '@/utils/helpers';
+import { formatNumber, DENOM, DIVISOR } from '@/utils/helpers';
 
 export default {
   name: 'validator-card',
+  data() {
+    return {
+      DENOM
+    }
+  },
   props: ['validator', 'ind'],
   computed: {
     ...mapGetters(['getKeybaseById', 'getValidatorByAddress']),
@@ -48,7 +53,7 @@ export default {
 
     bondedTokens() {
       if (this.validator !== undefined) {
-        return formatNumber(parseInt(this.validator.tokens, 10));
+        return formatNumber(parseInt(this.validator.tokens / DIVISOR, 10));
       }
       return null;
     },

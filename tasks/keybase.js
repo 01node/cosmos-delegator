@@ -40,7 +40,7 @@ function getKeybaseProfileFromResponse(keybaseId, { data }) {
 
 async function main() {
   const validators = (await axios(
-    `https://iris-relay.01node.com/stake/validators`
+    `https://sentryl1.01node.com/staking/validators`
   )).data;
   const cache = {};
   await Promise.all(

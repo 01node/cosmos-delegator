@@ -3,7 +3,7 @@
     <div class="container">
       <div class="navbar-translate">
         <a class="navbar-brand" href="/">
-          <span>IRISnet Delegator</span>
+          <span>Cosmos</span> Delegator
         </a>
         <button
           class="navbar-toggler navbar-toggler"
@@ -23,7 +23,7 @@
         <div class="navbar-collapse-header">
           <div class="row">
             <div class="col-6 collapse-brand">
-              <a>IRISnet Delegator</a>
+              <a>Cosmos Delegator</a>
             </div>
             <div class="col-6 collapse-close text-right">
               <button
@@ -45,16 +45,16 @@
             <router-link to="/delegate" class="btn btn-primary">Delegate</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/how-to-delegate" class="nav-link">How to delegate?</router-link>
+            <router-link to="/bucket-delegate" class="nav-link">Buckets</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/validators" class="nav-link">Validators</router-link>
+            <router-link to="/validators" class="nav-link">Validators List</router-link>
           </li>
-          <li class="nav-item p-0">
-            <a class="nav-link" href="#" target="_blank">
-              <i class="fab fa-github"></i>
-              <p class="d-lg-none d-xl-none">Github</p>
-            </a>
+          <li class="nav-item">
+            <router-link to="/my-account" class="nav-link">My Account</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/help" class="nav-link">Help</router-link>
           </li>
         </ul>
       </div>
@@ -64,14 +64,14 @@
 
 <script>
 export default {
-  name: 'app-header'
+  name: "app-header"
 };
 
 window.onscroll = function() {
   if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-    document.getElementById('navbar').classList.add('scrolled');
+    document.getElementById("navbar").classList.add("scrolled");
   } else {
-    document.getElementById('navbar').classList.remove('scrolled');
+    document.getElementById("navbar").classList.remove("scrolled");
   }
 };
 </script>
@@ -80,7 +80,14 @@ window.onscroll = function() {
 <style scoped lang="scss">
 #navbar.navbar {
   &.scrolled {
-    background-color: rgba(0,0,0,0.9) !important;
+    background-color: rgba(0, 0, 0, 0.9) !important;
+  }
+
+  .nav-link {
+    &.router-link-active {
+      color: #fff;
+      font-weight: bold;
+    }
   }
 }
 </style>

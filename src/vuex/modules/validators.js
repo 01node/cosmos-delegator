@@ -10,17 +10,17 @@ export default () => {
   let goodReturns = [];
 
   axios
-    .get('https://iris-relay.01node.com/stake/validators?page=1')
+    .get("https://sentryl1.01node.com/staking/validators?page=1")
     .then(first => {
       validators.push(...first.data);
 
       axios
-        .get('https://iris-relay.01node.com/stake/validators?page=2')
+        .get("https://sentryl1.01node.com/staking/validators?page=2")
         .then(second => {
           validators.push(...second.data);
 
           axios
-            .get('https://iris-relay.01node.com/validatorsets/latest')
+            .get("https://sentryl1.01node.com/validatorsets/latest")
             .then(latest => {
               const latestSet = latest.data.validators;
 

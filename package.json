@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && npm run keybase-cache",
+    "build": "npm run keybase-cache && vue-cli-service build",
     "keybase-cache": "node ./tasks/keybase.js",
     "deploy:test": "firebase deploy --only hosting --project irisnet-delegator-test",
     "lint": "vue-cli-service lint"
@@ -16,13 +16,17 @@
     "bip39": "^3.0.2",
     "core-js": "^2.6.5",
     "crypto-js": "^3.1.9-1",
+    "firebase": "^6.1.1",
     "ledger-cosmos-js": "^1.0.0",
+    "numbro": "^2.1.2",
     "secp256k1": "^3.7.0",
     "vue": "^2.6.10",
+    "vue-async-computed": "^3.7.0",
     "vue-router": "^3.0.3",
     "vue-scrollto": "^2.15.0",
     "vue-slider-component": "^3.0.31",
     "vue2-circle-progress": "^1.2.3",
+    "vuetify": "^1.5.14",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

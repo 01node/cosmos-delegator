@@ -14,7 +14,7 @@
         <div class="row">
           <ul class="list-group">
             <li class="list-group-item"><span v-text="commissionRate"></span>% commision</li>
-            <li class="list-group-item"><span v-text="bondedTokens"></span> IRIS delegated</li>
+            <li class="list-group-item"><span v-text="bondedTokens"></span> {{ DENOM }} delegated</li>
           </ul>
         </div>
       </div>
@@ -38,10 +38,15 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { formatNumber } from '@/utils/helpers';
+import { formatNumber, DENOM, DIVISOR } from '@/utils/helpers';
 
 export default {
   name: 'validator-card',
+  data() {
+    return {
+      DENOM
+    }
+  },
   props: ['operator_address'],
   computed: {
     ...mapGetters(['getKeybaseById', 'getValidatorByAddress']),
@@ -67,7 +72,7 @@ export default {
 
     bondedTokens() {
       if (this.validator !== undefined) {
-        return formatNumber(parseInt(this.validator.tokens, 10));
+        return formatNumber(parseInt(this.validator.tokens / DIVISOR, 10));
       }
       return null;
     },

@@ -3,54 +3,59 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12">
-          <h1 class="text-center">Introducing Buckets</h1>
+          <h1 class="text-center title">Introducing Buckets</h1>
           <p class="text-center">
             Delegate to one of our 3 buckets of validators (3-5 validators) to minimise the risk,
             and suport the decentralization of the network.
           </p>
-          <div class="row row-grid justify-content-center">
-            <div class="col-12 col-lg-3 text-left">
-              <div class="info">
-                <div class="icon icon-primary">
-                  <i class="fab fa-bitbucket"></i>
+          <div class="row mt-5">
+            <div class="col-12 col-md-4 text-center">
+              <div class="card bg-transparent">
+                <div class="card-header">
+                  <i class="fab fa-5x fa-bitbucket text-primary"></i>
                 </div>
-                <h4 class="info-title">Random Bucket</h4>
-                <hr class="line-primary" />
-                <p>
-                  we choose 3-5 random validators from the list of active validators, we exclude the
-                  validators with a commission greater than 20%.
-                </p>
+                <div class="card-body text-center">
+                  <h3>Random Bucket</h3>
+                  <p class="description">
+                    Randomly select 3-5 validators from the list of active validators, excluding the
+                    validators with a commission greater than 20%.
+                  </p>
+                </div>
               </div>
             </div>
-            <div class="col-12 col-lg-3 text-left">
-              <div class="info">
-                <div class="icon icon-warning">
-                  <i class="fab fa-bitbucket"></i>
+            <div class="col-12 col-md-4 text-center">
+              <div class="card bg-transparent">
+                <div class="card-header">
+                  <i class="fab fa-5x fa-bitbucket text-warning"></i>
                 </div>
-                <h4 class="info-title">Small Validators Bucket</h4>
-                <hr class="line-warning" />
-                <p>
-                  we choose 3-5 validators who don't have a big stake (from the bottom of the
-                  top100)
-                </p>
+                <div class="card-body text-center">
+                  <h3>Small Validators Bucket</h3>
+                  <p class="description">
+                    Randomly select 3 validators from the ones with the lowest stake values from the active
+                    validators list (bottom 20 validators).
+                  </p>
+                </div>
               </div>
             </div>
-            <div class="col-12 col-lg-3 text-left">
-              <div class="info">
-                <div class="icon icon-success">
-                  <i class="fab fa-bitbucket"></i>
+            <div class="col-12 col-md-4 text-center">
+              <div class="card bg-transparent">
+                <div class="card-header">
+                  <i class="fab fa-5x fa-bitbucket text-success"></i>
                 </div>
-                <h4 class="info-title">Custom Bucket</h4>
-                <hr class="line-success" />
-                <p>
-                  create your own bucket of 3-5 validators based on your preferences.
-                </p>
+                <div class="card-body text-center">
+                  <h3>Custom Bucket</h3>
+                  <p class="description">
+                    Create your own custom bucket, by selecting validators from the entire active validators
+                    list. There are no restrictions enabled.
+                  </p>
+                </div>
               </div>
             </div>
             <div class="col-12 text-center">
-              <router-link to="/bucket-delegate" class="btn btn-secondary"
-                >Find more about Bucket Delegate <i class="fas fa-arrow-right"></i
-              ></router-link>
+              <router-link to="/bucket-delegate" class="btn btn-secondary">
+                Find more about Buckets
+                <i class="fas fa-arrow-right"></i>
+              </router-link>
             </div>
           </div>
         </div>
@@ -61,7 +66,7 @@
 
 <script>
 export default {
-  name: 'buckets-section'
+  name: "buckets-section"
 };
 </script>
 

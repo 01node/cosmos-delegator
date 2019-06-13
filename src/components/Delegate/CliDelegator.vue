@@ -2,7 +2,7 @@
   <div v-if="validator" class="col-12 col-md-8">
     <div class="card">
       <div class="card-header d-flex justify-content-between">
-        <h6 class="category-social"><i class="fas fa-terminal"></i> Delegate with IRISCLI</h6>
+        <h6 class="category-social"><i class="fas fa-terminal"></i> Delegate with gaiacli</h6>
         <a href="#" class="btn btn-round btn-link p-0 m-0">
           <i class="fas fa-lg fa-question-circle"></i>
         </a>
@@ -10,7 +10,7 @@
       <div class="card-body">
         <div class="col-12 col-md-6" v-if="!delegated">
           <div class="form-group">
-            <label>Delegate amount (in IRIS)</label>
+            <label>Delegate amount (in ATOM)</label>
             <input type="number" v-model="delegateValue" value="0" placeholder="Enter amount" class="form-control" />
           </div>
           <div class="form-group">

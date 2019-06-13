@@ -11,7 +11,7 @@
     </td>
     <td class="operatorAddress" v-text="data.operator_address"></td>
     <td class="text-center"><span v-text="commissionRate"></span>%</td>
-    <td><span v-text="bondedTokens"></span> IRIS</td>
+    <td><span v-text="bondedTokens"></span> {{ DENOM }}</td>
     <td>
       <button class="btn btn-primary" v-on:click="$emit('select-validator', data.operator_address)">
         Add to bucket
@@ -23,10 +23,15 @@
 
 <script >
 import { mapGetters } from 'vuex';
-import { formatNumber } from '@/utils/helpers.js';
+import { formatNumber, DENOM, DIVISOR } from '@/utils/helpers.js';
 
 export default {
   name: 'validator-row',
+  data() {
+    return {
+      DENOM
+    }
+  },
   props: ['data', 'ind'],
   computed: {
     ...mapGetters(['keybase']),
@@ -35,7 +40,7 @@ export default {
     },
 
     bondedTokens() {
-      return formatNumber(parseInt(this.data.tokens));
+      return formatNumber(parseInt(this.data.tokens / DIVISOR));
     },
 
     avatarUrl() {

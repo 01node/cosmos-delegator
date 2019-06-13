@@ -7,6 +7,7 @@ import Delegate from './views/Delegate.vue';
 import BucketDelegate from './views/BucketDelegate.vue';
 import DelegateValidator from './views/DelegateValidator.vue';
 import HowToDelegate from './views/HowToDelegate.vue';
+import MyAccount from './views/MyAccount.vue';
 
 Vue.use(Router);
 
@@ -18,8 +19,18 @@ export default new Router({
       component: Home
     },
     {
+      path: '/my-account',
+      name: 'my-account',
+      component: MyAccount
+    },
+    {
       path: '/how-to-delegate',
       name: 'how-to-delegate',
+      component: HowToDelegate
+    },
+    {
+      path: '/help',
+      name: 'help',
       component: HowToDelegate
     },
     {
