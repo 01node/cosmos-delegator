@@ -3,10 +3,10 @@
     <td>
       <img :src="avatarUrl" class="rounded-circle" height="24px" />
       <router-link
-        :to="data.operator_address"
+        target="_blank"
+        :to="{ name: 'validator', params: { address: data.operator_address } }"
         class="btn btn-link btn-neutral"
         v-text="data.description.moniker"
-        append
       ></router-link>
     </td>
     <td class="operatorAddress" v-text="data.operator_address"></td>
@@ -19,7 +19,6 @@
     </td>
   </tr>
 </template>
-
 
 <script >
 import { mapGetters } from 'vuex';

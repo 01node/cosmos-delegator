@@ -11,14 +11,6 @@
         <template v-slot:items="props">
           <tr :active="props.item.selected" :key="props.item.validator_address">
             <td>
-              <v-checkbox
-                v-model="props.item.selected"
-                :input-value="props.item.selected"
-                primary
-                hide-details
-              ></v-checkbox>
-            </td>
-            <td>
               <validator-item :operator_address="props.item.validator_address"/>
             </td>
             <td class="text-xs-right" v-text="formatShares(props.item.shares)"></td>
@@ -95,9 +87,6 @@ export default {
         delegator: this.delegatorAddress
       },
       headers: [
-        {
-          sortable: false
-        },
         {
           text: "Validator",
           align: "left",

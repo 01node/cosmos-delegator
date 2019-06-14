@@ -3,10 +3,9 @@
     <td>
       <img :src="avatarUrl" class="rounded-circle" height="24px" />
       <router-link
-        :to="data.operator_address"
+        :to="{ name: 'validator', params: { address: data.operator_address } }"
         class="btn btn-link btn-neutral"
         v-text="data.description.moniker"
-        append
       ></router-link>
       <span class="badge badge-success" v-if="data.description.moniker === '01node.com'"
         ><i class="fas fa-check"></i> metrics</span
@@ -19,7 +18,7 @@
     <td><span v-text="selfBonded"></span> {{ DENOM }}s</td>
     <td>
       <router-link
-        to="/delegate/iva1nzgvvfam8n4lskkcqmhes07td6wkum9cffvkkx"
+        :to="{ name: 'delegate-to', params: { address: data.operator_address } }"
         class="btn btn-primary btn-simple"
         >Delegate</router-link
       >
@@ -71,7 +70,10 @@ export default {
 
     this.uptime = numbro(1).format({ output: 'percent' });
 
-    this.commissionRate = numbro(this.data.commission.rate).format({ output: 'percent', mantissa: 0 });
+    this.commissionRate = numbro(this.data.commission.rate).format({
+      output: 'percent',
+      mantissa: 0
+    });
 
     this.bondedTokens = numbro(parseInt(this.data.tokens / DIVISOR)).format({
       thousandSeparated: true
