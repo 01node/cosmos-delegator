@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="home" v-if="!ledger || this.ledger.connected === false || (ledger && address.bech32 === undefined)">
+    <div
+      class="home"
+      v-if="!ledger || this.ledger.connected === false || (ledger && address.bech32 === undefined)"
+    >
       <div class="page-header">
         <img src="@/assets/blob.png" class="path" />
         <img src="@/assets/path2.png" class="path2" />
@@ -55,7 +58,10 @@
           <!-- BALANCES + REWARDS -->
           <div class="col-12 col-md-4" v-if="address.bech32">
             <my-balances :delegatorAddress="address.bech32" />
-            <my-rewards :delegatorAddress="address.bech32" />
+            <my-rewards
+              :delegatorAddress="address.bech32"
+              @generated-messages="handleGeneratedMessages"
+            />
           </div>
           <!-- /BALANCES -->
           <!-- DELEGATIONS + TRANSACTIONS -->
@@ -139,7 +145,8 @@ export default {
       delegateInfo: null,
       delegateError: null,
       txMessages: [],
-      txMessage: null
+      txMessage: null,
+      type: 'normal'
     };
   },
   components: { MyBalances, MyDelegations, MyRewards, MyTransactions },
