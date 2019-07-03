@@ -2,16 +2,17 @@ import bech32 from 'bech32';
 import axios from 'axios';
 
 const DIVISOR = 1000000;
-const DENOM = 'ATOM';
-const REALDENOM = 'uatom';
-const LCD = 'https://sentryl1.01node.com';
+const CHAIN_ID = "columbus-1";
+const DENOM = 'LUNA';
+const REALDENOM = 'uluna';
+const LCD = 'https://terral.01node.com';
 const SETTINGS = {
-  bech32PrefixAccAddr: 'cosmos',
-  bech32PrefixAccPub: 'cosmospub',
-  bech32PrefixValAddr: 'cosmosvaloper',
-  bech32PrefixValPub: 'cosmosvaloperpub',
-  bech32PrefixConsAddr: 'cosmosvalcons',
-  bech32PrefixConsPub: 'cosmosvalconspub'
+  bech32PrefixAccAddr: 'terra',
+  bech32PrefixAccPub: 'terrapub',
+  bech32PrefixValAddr: 'terravaloper',
+  bech32PrefixValPub: 'terravaloperpub',
+  bech32PrefixConsAddr: 'terravalcons',
+  bech32PrefixConsPub: 'terravalconspub'
 };
 
 const formatNumber = num => {
@@ -60,5 +61,6 @@ export {
   DIVISOR,
   getSelfBonded,
   DENOM,
-  REALDENOM
+  REALDENOM,
+  CHAIN_ID
 };

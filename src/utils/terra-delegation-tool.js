@@ -23,11 +23,11 @@ import {
 import axios from 'axios';
 import Big from 'big.js';
 import secp256k1 from 'secp256k1';
-import txs from './cosmos-txs';
+import txs from './terra-txs';
 
-const defaultHrp = 'cosmos';
+const defaultHrp = 'terra';
 
-const IrisDelegatorTool = function() {
+const TerraDelegatorTool = function() {
   // eslint-disable-next-line camelcase
   this.comm = comm_u2f;
   this.connected = false;
@@ -45,18 +45,18 @@ const IrisDelegatorTool = function() {
 };
 
 // eslint-disable-next-line no-unused-vars
-IrisDelegatorTool.prototype.setNodeURL = function(resturl) {
+TerraDelegatorTool.prototype.setNodeURL = function(resturl) {
   this.resturl = resturl;
 };
 
 // Switch transport to HID (useful for local testing)
-IrisDelegatorTool.prototype.switchTransportToHID = function() {
+TerraDelegatorTool.prototype.switchTransportToHID = function() {
   // eslint-disable-next-line camelcase
   this.comm = comm_node;
 };
 
 // Switch transport to U2F (can run in browser/client side but requires HTTPS)
-IrisDelegatorTool.prototype.switchTransportToU2F = function() {
+TerraDelegatorTool.prototype.switchTransportToU2F = function() {
   // eslint-disable-next-line camelcase
   this.comm = comm_u2f;
 };
@@ -103,7 +103,7 @@ function nodeURL(cdt) {
 }
 
 // Detect when a ledger device is connected and verify the cosmos app is running.
-IrisDelegatorTool.prototype.connect = async function() {
+TerraDelegatorTool.prototype.connect = async function() {
   this.connected = false;
   this.lastError = null;
 
@@ -154,7 +154,7 @@ function connectedOrThrow(cdt) {
 }
 
 // Returns a signed transaction ready to be relayed
-IrisDelegatorTool.prototype.sign = async function(unsignedTx, txContext) {
+TerraDelegatorTool.prototype.sign = async function(unsignedTx, txContext) {
   connectedOrThrow(this);
   if (typeof txContext.path === 'undefined') {
     this.lastError = 'context should include the account path';
@@ -177,7 +177,7 @@ IrisDelegatorTool.prototype.sign = async function(unsignedTx, txContext) {
 };
 
 // Retrieve public key and bech32 address
-IrisDelegatorTool.prototype.retrieveAddress = async function(account, index) {
+TerraDelegatorTool.prototype.retrieveAddress = async function(account, index) {
   connectedOrThrow(this);
 
   const path = [44, 118, account, 0, index];
@@ -202,7 +202,7 @@ IrisDelegatorTool.prototype.retrieveAddress = async function(account, index) {
 
 // Scan multiple address in a derivation path range (44’/118’/X/0/Y)
 // eslint-disable-next-line max-len
-IrisDelegatorTool.prototype.scanAddresses = async function(
+TerraDelegatorTool.prototype.scanAddresses = async function(
   minAccount,
   maxAccount,
   minIndex,
@@ -222,7 +222,7 @@ IrisDelegatorTool.prototype.scanAddresses = async function(
   return answer;
 };
 
-IrisDelegatorTool.prototype.retrieveValidators = async function() {
+TerraDelegatorTool.prototype.retrieveValidators = async function() {
   const url = `${nodeURL(this)}/staking/validators`;
   return axios.get(url).then(
     r => {
@@ -240,7 +240,7 @@ IrisDelegatorTool.prototype.retrieveValidators = async function() {
   );
 };
 
-IrisDelegatorTool.prototype.getAccountInfo = async function(addr) {
+TerraDelegatorTool.prototype.getAccountInfo = async function(addr) {
   const url = `${nodeURL(this)}/auth/accounts/${addr.bech32}`;
 
   const txContext = {
@@ -258,7 +258,7 @@ IrisDelegatorTool.prototype.getAccountInfo = async function(addr) {
 
           if (r.data.value.coins !== null) {
             let coins = r.data.value.coins.reduce((acc,it) => {
-              return it.denom === 'uatom' ? acc + parseInt(it.amount) : acc;
+              return it.denom === 'uterra' ? acc + parseInt(it.amount) : acc;
             }, 0);
 
             txContext.balanceIris = Number(coins / 1000000);
@@ -273,7 +273,7 @@ IrisDelegatorTool.prototype.getAccountInfo = async function(addr) {
   );
 };
 
-IrisDelegatorTool.prototype.getAccountDelegations = async function(
+TerraDelegatorTool.prototype.getAccountDelegations = async function(
   validators,
   addr
 ) {
@@ -325,7 +325,7 @@ IrisDelegatorTool.prototype.getAccountDelegations = async function(
 
 // Retrieve atom balances from the network for a list of account
 // Retrieve delegated/not-delegated balances for each account
-IrisDelegatorTool.prototype.retrieveBalances = async function(addressList) {
+TerraDelegatorTool.prototype.retrieveBalances = async function(addressList) {
   const validators = await this.retrieveValidators();
 
   // Get all balances
@@ -353,7 +353,7 @@ IrisDelegatorTool.prototype.retrieveBalances = async function(addressList) {
 
 // Creates a new delegation tx based on the input parameters
 // this function expect that retrieve balances has been called before
-IrisDelegatorTool.prototype.txCreateDelegate = async function(
+TerraDelegatorTool.prototype.txCreateDelegate = async function(
   txContext,
   validatorBech32,
   uatomAmount,
@@ -377,7 +377,7 @@ IrisDelegatorTool.prototype.txCreateDelegate = async function(
 
 // Creates a new staking tx based on the input parameters
 // this function expect that retrieve balances has been called before
-IrisDelegatorTool.prototype.txCreateRedelegate = async function(
+TerraDelegatorTool.prototype.txCreateRedelegate = async function(
   txContext,
   validatorSourceBech32,
   validatorDestBech32,
@@ -409,7 +409,7 @@ IrisDelegatorTool.prototype.txCreateRedelegate = async function(
 
 // Creates a new undelegation tx based on the input parameters
 // this function expect that retrieve balances has been called before
-IrisDelegatorTool.prototype.txCreateUndelegate = async function(
+TerraDelegatorTool.prototype.txCreateUndelegate = async function(
   txContext,
   validatorBech32,
   uatomAmount,
@@ -432,7 +432,7 @@ IrisDelegatorTool.prototype.txCreateUndelegate = async function(
 };
 
 // Relays a signed transaction and returns a transaction hash
-IrisDelegatorTool.prototype.txSubmit = async function(signedTx) {
+TerraDelegatorTool.prototype.txSubmit = async function(signedTx) {
   const txBody = {
     tx: signedTx.value,
     mode: 'async'
@@ -445,9 +445,9 @@ IrisDelegatorTool.prototype.txSubmit = async function(signedTx) {
 };
 
 // Retrieve the status of a transaction hash
-IrisDelegatorTool.prototype.txStatus = async function(txHash) {
+TerraDelegatorTool.prototype.txStatus = async function(txHash) {
   const url = `${nodeURL(this)}/txs/${txHash}`;
   return axios.get(url).then(r => r.data, e => wrapError(this, e));
 };
 
-export default IrisDelegatorTool;
+export default TerraDelegatorTool;
