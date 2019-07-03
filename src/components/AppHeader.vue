@@ -2,9 +2,7 @@
   <nav id="navbar" class="navbar navbar-expand-lg fixed-top navbar-transparent">
     <div class="container">
       <div class="navbar-translate">
-        <a class="navbar-brand" href="/">
-          <span>Cosmos</span> Delegator
-        </a>
+        <network-selector />
         <button
           class="navbar-toggler navbar-toggler"
           type="button"
@@ -63,15 +61,17 @@
 </template>
 
 <script>
+import NetworkSelector from '@/components/NetworkSelector';
 export default {
-  name: "app-header"
+  name: 'app-header',
+  components: { NetworkSelector }
 };
 
 window.onscroll = function() {
   if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-    document.getElementById("navbar").classList.add("scrolled");
+    document.getElementById('navbar').classList.add('scrolled');
   } else {
-    document.getElementById("navbar").classList.remove("scrolled");
+    document.getElementById('navbar').classList.remove('scrolled');
   }
 };
 </script>
