@@ -4,7 +4,7 @@
       <div class="row mb-5 pb-5">
         <div class="col-md-5 text-left">
           <hr class="line-success" />
-          <h1 class="mb-0">Delegate on Cosmos Network</h1>
+          <h1 class="mb-0">Delegate on Terra Network</h1>
           <p class="subtitle">
             Select the validator where you want to delegate.
           </p>

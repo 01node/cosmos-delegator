@@ -5,7 +5,7 @@
         <div class="row mb-5 pb-5">
           <div class="col-md-6 text-left">
             <hr class="line-success" />
-            <h1 class="mb-0">How to delegate on Cosmos Network?</h1>
+            <h1 class="mb-0">How to delegate on Terra?</h1>
             <p class="subtitle"></p>
           </div>
         </div>
