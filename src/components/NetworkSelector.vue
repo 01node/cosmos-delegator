@@ -24,21 +24,21 @@ export default {
       networks: [
         {
           id: 'cosmos',
-          title: 'Cosmos Network',
+          title: 'Cosmos (cosmoshub-2)',
           logo: 'https://cosmos.network/img/cosmos-wordmark.6cbfcad2.svg',
           current: false,
           link: 'https://cosmos-delegator.01node.com'
         },
         {
           id: 'iris',
-          title: 'IRISnet',
+          title: 'IRISnet (irishub)',
           logo: 'https://www.irisnet.org/dist/irisnet_logo.png?4386a8f8710c9076ff3bb63fc78ef4e7',
           current: false,
           link: 'https://iris-delegator.01node.com'
         }
         /* {
           id: 'terra',
-          title: 'Terra Money',
+          title: 'Terra (columbus-2)',
           current: true,
           link: 'https://terra-delegator.01node.com'
         } */
@@ -69,7 +69,7 @@ export default {
   transition: all 0.2s ease-in-out;
   border-radius: 5px;
   box-shadow: 1px 2px 2px 0px #000;
-
+  width:260px;
   background-color: lighten(#171941, 10);
 
   &.active {
