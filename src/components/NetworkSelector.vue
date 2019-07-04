@@ -24,21 +24,21 @@ export default {
       networks: [
         /* {
           id: 'cosmos',
-          title: 'Cosmos Network',
+          title: 'Cosmos (cosmoshub-2)',
           logo: 'https://cosmos.network/img/cosmos-wordmark.6cbfcad2.svg',
           current: false,
           link: 'https://cosmos-delegator.01node.com'
         }, */
         {
           id: 'iris',
-          title: 'IRISnet',
+          title: 'IRISnet (irishub)',
           logo: 'https://www.irisnet.org/dist/irisnet_logo.png?4386a8f8710c9076ff3bb63fc78ef4e7',
           current: false,
           link: 'https://iris-delegator.01node.com'
         },
         {
           id: 'terra',
-          title: 'Terra Money',
+          title: 'Terra (columbus-2)',
           logo: 'https://blobscdn.gitbook.com/v0/b/gitbook-28427.appspot.com/o/spaces%2F-LUZHYWSCovhzTQtyRDP%2Favatar.png?generation=1554296533269532&alt=media',
           current: true,
           link: 'https://terra-delegator.01node.com'
