@@ -5,24 +5,24 @@
       <table class="table table-sm table-borderless text-white">
         <tr>
           <th class="text-success">Available</th>
-          <th class="text-success text-right">{{ available }} {{ DENOM }}s</th>
+          <th class="text-success text-right">{{ available }} {{ DENOM }}</th>
         </tr>
         <tr>
           <td>Delegated</td>
-          <td class="text-right">{{ delegated }} {{ DENOM }}s</td>
+          <td class="text-right">{{ delegated }} {{ DENOM }}</td>
         </tr>
         <tr>
           <td>Unbonding</td>
-          <td class="text-right">{{ unbonded }} {{ DENOM }}s</td>
+          <td class="text-right">{{ unbonded }} {{ DENOM }}</td>
         </tr>
         <tr>
           <td>Rewards</td>
-          <td class="text-right">{{ rewards }} {{ DENOM }}s</td>
+          <td class="text-right">{{ rewards }} {{ DENOM }}</td>
         </tr>
         <tr>
           <th>Total</th>
           <th class="text-right">
-            <div class="total">{{ total }} {{ DENOM }}s</div>
+            <div class="total">{{ total }} {{ DENOM }}</div>
             <div class="total-usd font-weight-normal">
               ~ ${{ totalUsd }}
               <br>
@@ -41,7 +41,7 @@
 <script>
 import axios from "axios";
 
-import { DENOM, REALDENOM, DIVISOR } from "@/utils/helpers";
+import { DENOM, REALDENOM, DIVISOR, LCD } from "@/utils/helpers";
 export default {
   name: "my-balances",
   data() {
@@ -69,7 +69,7 @@ export default {
   methods: {
     async getAvailable() {
       const response = await axios.get(
-        "https://sentryl1.01node.com/bank/balances/" + this.delegatorAddress
+        `${LCD}/bank/balances/` + this.delegatorAddress
       );
 
       const rewarded = await response.data.reduce((acc, it) => {
@@ -80,7 +80,7 @@ export default {
     },
     async getRewards() {
       const response = await axios.get(
-        `https://sentryl1.01node.com/distribution/delegators/${
+        `${LCD}/distribution/delegators/${
           this.delegatorAddress
         }/rewards`
       );
@@ -93,7 +93,7 @@ export default {
     },
     async getDelegated() {
       const response = await axios.get(
-        `https://sentryl1.01node.com/staking/delegators/${
+        `${LCD}/stake/delegators/${
           this.delegatorAddress
         }/delegations`
       );
@@ -106,7 +106,7 @@ export default {
     },
     async getUnbonded() {
       const response = await axios.get(
-        `https://sentryl1.01node.com/staking/delegators/${
+        `${LCD}/stake/delegators/${
           this.delegatorAddress
         }/unbonding_delegations`
       );
@@ -119,7 +119,7 @@ export default {
     },
     async getPrice() {
       const response = await axios.get(
-        "https://api.coingecko.com/api/v3/coins/cosmos"
+        "https://api.coingecko.com/api/v3/coins/iris"
       );
 
       this.price = parseFloat(response.data.market_data.current_price.usd);

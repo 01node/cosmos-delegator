@@ -2,9 +2,7 @@
   <div v-if="validator" class="col-12 col-md-8">
     <div class="card">
       <div class="card-header d-flex justify-content-between">
-        <h6 class="category-social">
-          <i class="fas fa-fire"></i> Delegate with Ledger
-        </h6>
+        <h6 class="category-social"><i class="fas fa-fire"></i> Delegate with Ledger</h6>
         <a href="#" class="btn btn-round btn-link p-0 m-0">
           <i class="fas fa-lg fa-question-circle"></i>
         </a>
@@ -45,24 +43,20 @@
             <i class="fas fa-lg fa-check-circle text-success"></i> Successfully connected to Ledger
             Device
           </li>
-          <li>
-            Your address is
-            <span
-              v-text="address.bech32"
-              @click="copyToClipboard()"
-              class="font-weight-bold text-success address-"
-            ></span>
-          </li>
+          <li>Your address is <span v-text="address.bech32" @click="copyToClipboard()" class="font-weight-bold text-success address-"></span></li>
           <li>
             Your current balance is
-            <span class="font-weight-bold" v-text="accountInfo.balanceIris"></span>
-            {{ DENOM }}
+            <span class="font-weight-bold" v-text="accountInfo.balanceIris"></span> IRIS
           </li>
         </ul>
 
-        <hr class="line-success">
+        <hr class="line-success" />
 
-        <div class="alert alert-info" v-if="delegateInfo && !errorMessage" v-text="delegateInfo"></div>
+        <div
+          class="alert alert-info"
+          v-if="delegateInfo && !errorMessage"
+          v-text="delegateInfo"
+        ></div>
         <div v-if="confirmed === false">
           <div
             class="delegate-form"
@@ -72,17 +66,19 @@
               <div class="col-12 col-md-4" v-if="!txMessage">
                 <h4>Delegate form</h4>
                 <div class="form-group">
-                  <label>Delegate amount (in {{ DENOM }})</label>
+                  <label>Delegate amount (in IRIS)</label>
                   <input
                     type="number"
                     v-model="delegateValue"
                     value="0"
                     placeholder="Enter amount"
                     class="form-control"
-                  >
+                  />
                 </div>
                 <div class="form-group">
-                  <button class="btn btn-primary" @click="generateTx()">Generate transaction</button>
+                  <button class="btn btn-primary" @click="generateTx()">
+                    Generate transaction
+                  </button>
                 </div>
               </div>
 
@@ -96,20 +92,14 @@
             </div>
           </div>
 
-          <div
-            class="alert alert-warning"
-            v-else
-          >You cannot delegate because you have 0 {{ DENOM }} tokens on the address.</div>
+          <div class="alert alert-warning" v-else>
+            You cannot delegate because you have 0 IRIS tokens on the address.
+          </div>
 
           <div class="alert alert-danger" v-if="errorMessage" v-text="errorMessage"></div>
           <button class="btn btn-primary" v-if="errorMessage && !txMessage" @click="connect">
             <i class="fas fa-refresh"></i> Refresh connection
           </button>
-        </div>
-      </div>
-      <div class="sslide card-body" v-if="waitConfirm">
-        <div class="alert alert-warning">
-          <i class="fas fa-spinner fa-spin"></i> Please wait while we broadcast your transaction.
         </div>
       </div>
       <div class="card-body" v-if="confirmed !== false">
@@ -135,23 +125,25 @@
 import { mapGetters } from "vuex";
 
 /* tslint:disable-next-line */
-import CosmosDelegateTool from "@/utils/cosmos-delegation-tool";
-import { DENOM, REALDENOM, DIVISOR } from "@/utils/helpers";
-import { signatureImport } from "secp256k1";
-import * as wallet from "@/utils/cosmos-wallet";
+import CosmosDelegateTool from "@/utils/iris-delegation-tool";
 
+import { signatureImport } from 'secp256k1';
+import * as wallet from '@/utils/cosmos-wallet';
+
+const DIVISOR = 1000000000000000000;
 const DEFAULT_FEE = 0.3;
-const CHAIN_ID = "cosmoshub-2";
+const DENOM = 'iris-atto';
+const CHAIN_ID = 'irishub';
 const HDPATH = [44, 118, 0, 0, 0];
-const DEFAULT_GAS = 150000;
+const DEFAULT_GAS = 600000;
 const DEFAULT_GAS_PRICE = 0.025;
-const RPC_ADDRESS = "https://sentryl1.01node.com/";
+const RPC_ADDRESS = 'https://iris-relay.01node.com/';
+
 
 export default {
-  name: "ledger-delegator",
+  name: 'ledger-delegator',
   data: () => {
     return {
-      DENOM,
       ledger: null,
       errorMessage: null,
       address: {},
@@ -165,11 +157,11 @@ export default {
       confirmed: false,
       waitConfirm: false,
       txHash: null
-    };
+    }
   },
-  props: ["operator_address"],
+  props: ['operator_address'],
   computed: {
-    ...mapGetters(["getValidatorByAddress"]),
+    ...mapGetters(['getValidatorByAddress']),
     validator() {
       return this.getValidatorByAddress(this.operator_address);
     }
@@ -179,7 +171,7 @@ export default {
       this.ledger = new CosmosDelegateTool();
       this.ledger.transportDebug = true;
       this.ledger.checkAppInfo = true;
-      this.ledger.setNodeURL("https://sentryl1.01node.com/");
+      this.ledger.setNodeURL("https://iris-relay.01node.com");
 
       try {
         this.connect();
@@ -205,12 +197,15 @@ export default {
         } catch (error) {
           this.errorMessage = error;
         }
+
       } catch (error) {
         this.errorMessage = error;
       }
     },
 
-    copyToClipboard() {},
+    copyToClipboard() {
+      
+    },
 
     async checkAddress() {
       if (this.ledger.connected === true) {
@@ -229,12 +224,10 @@ export default {
         try {
           this.accountInfo = await this.ledger.getAccountInfo(this.address);
         } catch (error) {
-          this.errorMessage =
-            "Ledger connection has been lost. Check your Ledger device.";
+          this.errorMessage = "Ledger connection has been lost. Check your Ledger device.";
         }
       } else {
-        this.errorMessage =
-          "Ledger connection has been lost. Check your Ledger device.";
+        this.errorMessage = "Ledger connection has been lost. Check your Ledger device.";
       }
     },
 
@@ -245,9 +238,10 @@ export default {
       this.confirmed = false;
       this.waitConfirm = true;
 
-      const response = await fetch(RPC_ADDRESS + "txs", {
-        method: "POST",
-        body: this.txData
+      console.log('txdataaaaa', JSON.stringify(this.txData));
+      const response = await fetch(RPC_ADDRESS + 'tx/broadcast', {
+        method: 'POST',
+        body: this.txData,
       });
 
       const data = await response.json();
@@ -267,7 +261,7 @@ export default {
       } else {
         this.confirmed = data;
         this.waitConfirm = false;
-        this.txHash = data.txhash;
+        this.txHash = data.hash;
         /* this.setState({
           confirmed: true,
           waitConfirm: false,
@@ -284,10 +278,9 @@ export default {
       );
 
       try {
-        const pubKeyBuffer = Buffer.from(this.address.pk, "hex");
+        const pubKeyBuffer = Buffer.from(this.address.pk, 'hex');
         const ledgerSignature = await this.ledger.app.sign(HDPATH, signMessage);
 
-        console.log("ledger signature code", ledgerSignature.return_code);
         if (ledgerSignature.return_code === 36864) {
           const signature = wallet.createSignature(
             signatureImport(ledgerSignature.signature),
@@ -304,7 +297,7 @@ export default {
           this.txData = null;
         }
       } catch ({ message, statusCode }) {
-        console.error("Error signing transaction", message, statusCode);
+        console.error('Error signing transaction', message, statusCode);
       }
     },
 
@@ -312,33 +305,30 @@ export default {
       const defaultTx = {
         fee: {
           amount: [
-            {
-              denom: REALDENOM,
-              amount: String(DEFAULT_GAS * DEFAULT_GAS_PRICE)
-            }
+            { denom: DENOM, amount: String(DEFAULT_FEE * DIVISOR) },
           ],
-          gas: String(DEFAULT_GAS)
+          gas: String(50000),
           /*1 500 000 000 000
           6 000 000 000 000 */
         },
         signature: null,
-        memo: "Stake online using delegate.01node.com"
+        memo: 'Stake online using delegate.01node.com',
       };
 
       let txMessage = defaultTx;
 
-      txMessage["msg"] = [
+      txMessage['msg'] = [
         {
-          type: "cosmos-sdk/MsgDelegate",
+          type: 'irishub/stake/MsgDelegate',
           value: {
-            delegator_address: this.address.bech32,
-            validator_address: this.operator_address,
-            amount: {
-              denom: REALDENOM,
-              amount: String(this.delegateValue * DIVISOR)
-            }
-          }
-        }
+            delegator_addr: this.address.bech32,
+            validator_addr: this.operator_address,
+            delegation: {
+              denom: DENOM,
+              amount: String((this.delegateValue * 1000).toString() + '000000000000000'),
+            },
+          },
+        },
       ];
 
       const requestMetaData = {
@@ -347,8 +337,9 @@ export default {
         account_number: String(this.accountInfo.accountNumber),
         chain_id: CHAIN_ID,
         fees: String(DEFAULT_GAS * DEFAULT_GAS_PRICE),
-        generate_only: false
+        generate_only: false,
       };
+
 
       // Save TX data to state
 
@@ -356,25 +347,26 @@ export default {
       this.requestMetaData = requestMetaData;
       this.txData = null;
       this.error = null;
-      this.delegateInfo = "Please sign transaction on Legder";
+      this.delegateInfo = 'Please sign transaction on Legder';
 
-      console.log("generated tx..");
+      console.log('generated tx..');
 
       // Sign TX
       await this.signTransaction();
       this.delegateInfo = null;
-      console.log("tx signed... now trying to inject");
+      console.log('tx signed... now trying to inject');
 
       if (this.txData !== null) {
         await this.injectTransaction();
-        console.log("successfully injected");
+        console.log('successfully injected');
       }
     }
   },
   async mounted() {
     await this.init();
   }
-};
+}
+
 </script>
 
 

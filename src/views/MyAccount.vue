@@ -58,20 +58,20 @@
           <!-- BALANCES + REWARDS -->
           <div class="col-12 col-md-4" v-if="address.bech32">
             <my-balances :delegatorAddress="address.bech32" />
-            <my-rewards
+            <!-- <my-rewards
               :delegatorAddress="address.bech32"
               @generated-messages="handleGeneratedMessages"
-            />
+            /> -->
           </div>
           <!-- /BALANCES -->
           <!-- DELEGATIONS + TRANSACTIONS -->
-          <div class="col-12 col-md-8" v-if="address.bech32 && txMessages.length === 0">
+          <!-- <div class="col-12 col-md-8" v-if="address.bech32 && txMessages.length === 0">
             <my-delegations
               :delegatorAddress="address.bech32"
               @generated-messages="handleGeneratedMessages"
             />
             <my-transactions :delegatorAddress="address.bech32" />
-          </div>
+          </div> -->
           <!-- /DELEGATIONS -->
 
           <!-- LEDGER ACTIONS -->
@@ -114,8 +114,8 @@
 
 <script>
 /* tslint:disable-next-line */
-import CosmosDelegateTool from '@/utils/cosmos-delegation-tool';
-import { DENOM, REALDENOM, DIVISOR } from '@/utils/helpers';
+import IrisDelegateTool from '@/utils/iris-delegation-tool';
+import { DENOM, REALDENOM, DIVISOR, LCD, CHAIN_ID } from '@/utils/helpers';
 import { signatureImport } from 'secp256k1';
 import * as wallet from '@/utils/cosmos-wallet';
 
@@ -125,11 +125,10 @@ import MyRewards from '@/components/MyAccount/MyRewards.vue';
 import MyTransactions from '@/components/MyAccount/MyTransactions.vue';
 
 const DEFAULT_FEE = 0.3;
-const CHAIN_ID = 'cosmoshub-2';
 const HDPATH = [44, 118, 0, 0, 0];
 const DEFAULT_GAS = 150000;
 const DEFAULT_GAS_PRICE = 0.025;
-const RPC_ADDRESS = 'https://sentryl1.01node.com/';
+const RPC_ADDRESS = LCD;
 
 export default {
   name: 'my-account',
@@ -152,10 +151,10 @@ export default {
   components: { MyBalances, MyDelegations, MyRewards, MyTransactions },
   methods: {
     async init() {
-      this.ledger = new CosmosDelegateTool();
+      this.ledger = new IrisDelegateTool();
       this.ledger.transportDebug = true;
       this.ledger.checkAppInfo = true;
-      this.ledger.setNodeURL('https://sentryl1.01node.com/');
+      this.ledger.setNodeURL(RPC_ADDRESS);
 
       try {
         this.connect();

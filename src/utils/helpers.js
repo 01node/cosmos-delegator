@@ -1,12 +1,13 @@
 import bech32 from 'bech32';
 import axios from 'axios';
 
-const DIVISOR = 1000000;
-const DENOM = 'ATOM';
-const REALDENOM = 'uatom';
-const LCD = 'https://sentryl1.01node.com';
+const DIVISOR = 1000000000000000000;
+const DENOM = 'IRIS';
+const REALDENOM = 'iris-atto';
+const LCD = 'https://iris-relay.01node.com';
+const CHAIN_ID = 'irishub';
 const SETTINGS = {
-  bech32PrefixAccAddr: 'cosmos',
+  bech32PrefixAccAddr: 'iris',
   bech32PrefixAccPub: 'cosmospub',
   bech32PrefixValAddr: 'cosmosvaloper',
   bech32PrefixValPub: 'cosmosvaloperpub',
@@ -60,5 +61,7 @@ export {
   DIVISOR,
   getSelfBonded,
   DENOM,
-  REALDENOM
+  LCD,
+  REALDENOM,
+  CHAIN_ID
 };

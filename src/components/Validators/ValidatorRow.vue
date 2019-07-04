@@ -13,7 +13,7 @@
     </td>
     <td class="operatorAddress" v-text="data.operator_address"></td>
     <td class="text-center"><span v-text="commissionRate"></span></td>
-    <td><span v-text="bondedTokens"></span> {{ DENOM }}s</td>
+    <td><span v-text="bondedTokens"></span> {{ DENOM }}</td>
     <td><span class="uptime" v-text="uptime"></span></td>
     <td><span v-text="selfBonded"></span> {{ DENOM }}s</td>
     <td>
