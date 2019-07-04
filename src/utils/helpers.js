@@ -59,6 +59,7 @@ export {
   getDelegatorAddress,
   DIVISOR,
   getSelfBonded,
+  LCD,
   DENOM,
   REALDENOM
 };
