@@ -61,6 +61,7 @@ export {
   DIVISOR,
   getSelfBonded,
   DENOM,
+  LCD,
   REALDENOM,
   CHAIN_ID
 };
