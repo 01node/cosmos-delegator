@@ -69,6 +69,7 @@ export default {
   display: none;
   transition: all 0.2s ease-in-out;
   border-radius: 5px;
+  width: 260px;
   box-shadow: 1px 2px 2px 0px #000;
 
   background-color: lighten(#171941, 10);
