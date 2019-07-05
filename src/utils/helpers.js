@@ -2,7 +2,7 @@ import bech32 from 'bech32';
 import axios from 'axios';
 
 const DIVISOR = 1000000;
-const CHAIN_ID = "columbus-1";
+const CHAIN_ID = "columbus-2";
 const DENOM = 'LUNA';
 const REALDENOM = 'uluna';
 const LCD = 'https://terral.01node.com';

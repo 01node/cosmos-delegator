@@ -71,7 +71,7 @@ export default {
     async generateTransaction() {
       const txMessage = [
         {
-          type: "cosmos-sdk/MsgUndelegate",
+          type: "staking/MsgUndelegate",
           value: {
             delegator_address: this.delegatorAddress,
             validator_address: this.from,

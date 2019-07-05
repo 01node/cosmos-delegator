@@ -41,7 +41,7 @@
 <script>
 import axios from "axios";
 
-import { DENOM, REALDENOM, DIVISOR } from "@/utils/helpers";
+import { DENOM, REALDENOM, DIVISOR, LCD } from "@/utils/helpers";
 export default {
   name: "my-balances",
   data() {
@@ -69,7 +69,7 @@ export default {
   methods: {
     async getAvailable() {
       const response = await axios.get(
-        "https://sentryl1.01node.com/bank/balances/" + this.delegatorAddress
+        `${LCD}/bank/balances/` + this.delegatorAddress
       );
 
       const rewarded = await response.data.reduce((acc, it) => {
@@ -80,7 +80,7 @@ export default {
     },
     async getRewards() {
       const response = await axios.get(
-        `https://sentryl1.01node.com/distribution/delegators/${
+        `${LCD}/distribution/delegators/${
           this.delegatorAddress
         }/rewards`
       );
@@ -93,7 +93,7 @@ export default {
     },
     async getDelegated() {
       const response = await axios.get(
-        `https://sentryl1.01node.com/staking/delegators/${
+        `${LCD}/staking/delegators/${
           this.delegatorAddress
         }/delegations`
       );
@@ -106,7 +106,7 @@ export default {
     },
     async getUnbonded() {
       const response = await axios.get(
-        `https://sentryl1.01node.com/staking/delegators/${
+        `${LCD}/staking/delegators/${
           this.delegatorAddress
         }/unbonding_delegations`
       );
@@ -119,7 +119,7 @@ export default {
     },
     async getPrice() {
       const response = await axios.get(
-        "https://api.coingecko.com/api/v3/coins/cosmos"
+        "https://api.coingecko.com/api/v3/coins/luna"
       );
 
       this.price = parseFloat(response.data.market_data.current_price.usd);

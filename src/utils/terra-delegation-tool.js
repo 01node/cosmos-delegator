@@ -256,9 +256,11 @@ TerraDelegatorTool.prototype.getAccountInfo = async function(addr) {
           txContext.sequence = Number(r.data.value.sequence).toString();
           txContext.accountNumber = Number(r.data.value.account_number).toString();
 
+          console.log(r.data.value.coins);
+
           if (r.data.value.coins !== null) {
             let coins = r.data.value.coins.reduce((acc,it) => {
-              return it.denom === 'uterra' ? acc + parseInt(it.amount) : acc;
+              return it.denom === 'uluna' ? acc + parseInt(it.amount) : acc;
             }, 0);
 
             txContext.balanceIris = Number(coins / 1000000);

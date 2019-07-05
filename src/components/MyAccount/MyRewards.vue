@@ -22,7 +22,7 @@
 
 <script>
 import axios from 'axios';
-import { DENOM, DIVISOR, REALDENOM, formatNumber } from '@/utils/helpers';
+import { DENOM, DIVISOR, REALDENOM, formatNumber, LCD } from '@/utils/helpers';
 
 export default {
   data() {
@@ -53,15 +53,15 @@ export default {
     },
     async generateWithdraw() {
       let response = await axios.get(
-        `https://sentryl1.01node.com/staking/delegators/${this.delegatorAddress}/delegations`
+        `${LCD}/staking/delegators/${this.delegatorAddress}/delegations`
       );
       let delegations = await response.data;
 
       let txMessage;
 
-      txMessage = delegations.map(item => {
+      txMessage = delegations.splic(0,4).map(item => {
         return {
-          type: 'cosmos-sdk/MsgWithdrawDelegationReward',
+          type: 'distribution/MsgWithdrawDelegationReward',
           value: {
             delegator_address: item.delegator_address,
             validator_address: item.validator_address
@@ -75,7 +75,7 @@ export default {
   async beforeMount() {
     try {
       const response = await axios.get(
-        `https://sentryl1.01node.com/distribution/delegators/${this.delegatorAddress}/rewards`
+        `${LCD}/distribution/delegators/${this.delegatorAddress}/rewards`
       );
 
       const rewarded = await response.data.reduce((acc, it) => {

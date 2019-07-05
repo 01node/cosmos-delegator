@@ -281,7 +281,7 @@ export default {
       this.confirmed = false;
       this.waitConfirm = true;
 
-      const response = await fetch(RPC_ADDRESS + "txs", {
+      const response = await fetch(RPC_ADDRESS + "/txs", {
         method: "POST",
         body: this.txData
       });
@@ -364,7 +364,7 @@ export default {
         }
 
         return {
-          type: "cosmos-sdk/MsgDelegate",
+          type: "staking/MsgDelegate",
           value: {
             delegator_address: this.address.bech32,
             validator_address: item.operator_address,

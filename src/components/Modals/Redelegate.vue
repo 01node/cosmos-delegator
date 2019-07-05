@@ -138,7 +138,7 @@
 
 <script>
 import Account from '@/components/Account.vue';
-import { DENOM, REALDENOM, DIVISOR } from '@/utils/helpers';
+import { DENOM, REALDENOM, DIVISOR, LCD } from '@/utils/helpers';
 import { mapGetters } from 'vuex';
 
 import ValidatorCard from '@/components/BucketDelegate/ValidatorCard.vue';
@@ -197,7 +197,7 @@ export default {
       if (this.type === 'single') {
         txMessage = [
           {
-            type: 'cosmos-sdk/MsgBeginRedelegate',
+            type: 'staking/MsgBeginRedelegate',
             value: {
               delegator_address: this.delegatorAddress,
               validator_src_address: this.from,

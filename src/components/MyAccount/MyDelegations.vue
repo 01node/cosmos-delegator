@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { DENOM, DIVISOR, formatNumber } from "@/utils/helpers";
+import { DENOM, DIVISOR, formatNumber, LCD } from "@/utils/helpers";
 import axios from "axios";
 
 import ValidatorItem from "@/components/MyAccount/ValidatorItem.vue";
@@ -105,7 +105,7 @@ export default {
   async beforeMount() {
     try {
       const response = await axios.get(
-        `https://sentryl1.01node.com/staking/delegators/${
+        `${LCD}/staking/delegators/${
           this.delegatorAddress
         }/delegations`
       );

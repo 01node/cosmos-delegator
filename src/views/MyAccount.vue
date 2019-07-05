@@ -217,7 +217,7 @@ export default {
       this.confirmed = false;
       this.waitConfirm = true;
 
-      const response = await fetch(RPC_ADDRESS + 'txs', {
+      const response = await fetch(RPC_ADDRESS + '/txs', {
         method: 'POST',
         body: this.txData
       });
