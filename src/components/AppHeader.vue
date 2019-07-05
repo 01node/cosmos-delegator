@@ -1,92 +1,105 @@
 <template>
-  <nav id="navbar" class="navbar navbar-expand-lg fixed-top navbar-transparent">
-    <div class="container">
-      <div class="navbar-translate">
-        <network-selector />
-        <button
-          class="navbar-toggler navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navigation"
-          aria-controls="navigation-index"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-bar bar1"></span>
-          <span class="navbar-toggler-bar bar2"></span>
-          <span class="navbar-toggler-bar bar3"></span>
-        </button>
+  <div class="container d-flex py-5 flex-column justify-content-center">
+    <div class="row">
+      <div class="col-12 text-center mb-4">
+        <h1>Select your network</h1>
       </div>
-      <div class="collapse navbar-collapse justify-content-end" id="navigation">
-        <div class="navbar-collapse-header">
-          <div class="row">
-            <div class="col-6 collapse-brand">
-              <a>Cosmos Delegator</a>
-            </div>
-            <div class="col-6 collapse-close text-right">
-              <button
-                type="button"
-                class="navbar-toggler"
-                data-toggle="collapse"
-                data-target="#navigation"
-                aria-controls="navigation-index"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-                <i class="tim-icons icon-simple-remove"></i>
-              </button>
+      <div class="col-12 col-md-4" v-for="(network, index) in networks" :key="index">
+        <a :href="network.link">
+          <div class="card card-coin card-plain">
+            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+              <div
+                class="image-container"
+                :class="network.id"
+                v-bind:style="{ backgroundImage: 'url(' + network.logo + ')' }"
+              ></div>
+
+              <div class="description text-center">{{ network.title }}</div>
             </div>
           </div>
-        </div>
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <router-link to="/delegate" class="btn btn-primary">Delegate</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/bucket-delegate" class="nav-link">Buckets</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/validators" class="nav-link">Validators List</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/my-account" class="nav-link">My Account</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/help" class="nav-link">Help</router-link>
-          </li>
-        </ul>
+        </a>
       </div>
     </div>
-  </nav>
+
+    <div class="mt-4 text-center">
+      <h4>Project build by</h4>
+      <a href="https://01node.com">
+        <img
+          src="https://01node.com/wp-content/themes/node/img/logo-01node-white.svg"
+          width="150px;"
+        />
+      </a>
+    </div>
+  </div>
 </template>
 
 <script>
-import NetworkSelector from '@/components/NetworkSelector';
 export default {
   name: 'app-header',
-  components: { NetworkSelector }
-};
-
-window.onscroll = function() {
-  if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-    document.getElementById('navbar').classList.add('scrolled');
-  } else {
-    document.getElementById('navbar').classList.remove('scrolled');
+  data() {
+    return {
+      networks: [
+        {
+          id: 'cosmos',
+          title: 'Cosmos (cosmoshub-2)',
+          logo: 'https://cosmos.network/img/cosmos-wordmark.6cbfcad2.svg',
+          current: false,
+          link: 'https://cosmos-delegator.01node.com'
+        },
+        {
+          id: 'iris',
+          title: 'IRISnet (irishub)',
+          logo: 'https://www.irisnet.org/dist/irisnet_logo.png?4386a8f8710c9076ff3bb63fc78ef4e7',
+          current: false,
+          link: 'https://iris-delegator.01node.com'
+        },
+        {
+          id: 'terra',
+          title: 'Terra (columbus-2)',
+          logo:
+            'https://blobscdn.gitbook.com/v0/b/gitbook-28427.appspot.com/o/spaces%2F-LUZHYWSCovhzTQtyRDP%2Favatar.png?generation=1554296533269532&alt=media',
+          current: true,
+          link: 'https://terra-delegator.01node.com'
+        }
+      ]
+    };
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-#navbar.navbar {
-  &.scrolled {
-    background-color: rgba(0, 0, 0, 0.9) !important;
-  }
+.container {
+  height: 100vh;
+  width: 100vw;
 
-  .nav-link {
-    &.router-link-active {
-      color: #fff;
-      font-weight: bold;
+  .card-coin {
+    height: 200px;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #344675;
+    }
+
+    .image-container {
+      width: 100%;
+      height: 100px;
+      background-size: 50%;
+      background-position: center center;
+
+      &.terra {
+        background-size: auto 50%;
+      }
+    }
+
+    img {
+      width: 60%;
+    }
+
+    .description {
+      display: block;
+      width: 100%;
     }
   }
 }
