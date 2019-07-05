@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {LCD} from '@/utils/helpers';
 
 export default () => {
   const emptyState = {
@@ -10,17 +11,17 @@ export default () => {
   let goodReturns = [];
 
   axios
-    .get("https://sentryl1.01node.com/staking/validators?page=1")
+    .get(`${LCD}/stake/validators?page=1`)
     .then(first => {
       validators.push(...first.data);
 
       axios
-        .get("https://sentryl1.01node.com/staking/validators?page=2")
+        .get(`${LCD}/stake/validators?page=2`)
         .then(second => {
           validators.push(...second.data);
 
           axios
-            .get("https://sentryl1.01node.com/validatorsets/latest")
+            .get(`${LCD}/validatorsets/latest`)
             .then(latest => {
               const latestSet = latest.data.validators;
 

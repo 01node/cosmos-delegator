@@ -6,7 +6,7 @@
     </div>
     <div class="card-body pt-4 text-center" v-else>
       <h2 class="mb-0">{{ rewards }}</h2>
-      <h4 class="mb-0">{{ DENOM }}s</h4>
+      <h4 class="mb-0">{{ DENOM }}</h4>
     </div>
     <div class="card-footer">
       <button class="btn btn-primary btn-link" @click="generateWithdraw()">
@@ -22,7 +22,7 @@
 
 <script>
 import axios from 'axios';
-import { DENOM, DIVISOR, REALDENOM, formatNumber } from '@/utils/helpers';
+import { DENOM, DIVISOR, REALDENOM, formatNumber, LCD } from '@/utils/helpers';
 
 export default {
   data() {
@@ -53,18 +53,18 @@ export default {
     },
     async generateWithdraw() {
       let response = await axios.get(
-        `https://sentryl1.01node.com/staking/delegators/${this.delegatorAddress}/delegations`
+        `${LCD}/stake/delegators/${this.delegatorAddress}/delegations`
       );
       let delegations = await response.data;
 
       let txMessage;
 
-      txMessage = delegations.map(item => {
+      txMessage = delegations.slice(0,5).map(item => {
         return {
           type: 'cosmos-sdk/MsgWithdrawDelegationReward',
           value: {
-            delegator_address: item.delegator_address,
-            validator_address: item.validator_address
+            delegator_addr: item.delegator_addr,
+            validator_addr: item.validator_addr
           }
         };
       });
@@ -75,14 +75,12 @@ export default {
   async beforeMount() {
     try {
       const response = await axios.get(
-        `https://sentryl1.01node.com/distribution/delegators/${this.delegatorAddress}/rewards`
+        `${LCD}/distribution/${this.delegatorAddress}/rewards`
       );
 
-      const rewarded = await response.data.reduce((acc, it) => {
-        return it.denom === REALDENOM ? acc + parseInt(it.amount) : acc;
-      }, 0);
+      const rewarded = await response.data.total[0].amount;
 
-      this.rewards = parseFloat(rewarded / DIVISOR);
+      this.rewards = parseFloat(rewarded / DIVISOR).toFixed(5);
 
       this.loading = false;
     } catch (error) {

@@ -58,20 +58,20 @@
           <!-- BALANCES + REWARDS -->
           <div class="col-12 col-md-4" v-if="address.bech32">
             <my-balances :delegatorAddress="address.bech32" />
-            <!-- <my-rewards
+             <my-rewards
               :delegatorAddress="address.bech32"
               @generated-messages="handleGeneratedMessages"
-            /> -->
+            />
           </div>
           <!-- /BALANCES -->
           <!-- DELEGATIONS + TRANSACTIONS -->
-          <!-- <div class="col-12 col-md-8" v-if="address.bech32 && txMessages.length === 0">
+           <div class="col-12 col-md-8" v-if="address.bech32 && txMessages.length === 0">
             <my-delegations
               :delegatorAddress="address.bech32"
               @generated-messages="handleGeneratedMessages"
             />
             <my-transactions :delegatorAddress="address.bech32" />
-          </div> -->
+          </div>
           <!-- /DELEGATIONS -->
 
           <!-- LEDGER ACTIONS -->
@@ -217,7 +217,7 @@ export default {
       this.confirmed = false;
       this.waitConfirm = true;
 
-      const response = await fetch(RPC_ADDRESS + 'txs', {
+      const response = await fetch(RPC_ADDRESS + '/txs', {
         method: 'POST',
         body: this.txData
       });

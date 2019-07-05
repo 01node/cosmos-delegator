@@ -40,10 +40,10 @@ export default {
   computed: {
     shares() {
       const sharesData = this.delegations.find(
-        item => item.validator_address === this.from
+        item => item.validator_addr === this.from
       );
       if (sharesData !== -1) {
-        return parseFloat(sharesData.shares / DIVISOR);
+        return parseFloat(sharesData.shares);
       }
 
       return 0;
@@ -73,8 +73,8 @@ export default {
         {
           type: "cosmos-sdk/MsgUndelegate",
           value: {
-            delegator_address: this.delegatorAddress,
-            validator_address: this.from,
+            delegator_addr: this.delegatorAddress,
+            validator_addr: this.from,
             amount: {
               denom: REALDENOM,
               amount: String(this.amount * DIVISOR)

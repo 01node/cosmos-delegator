@@ -57,13 +57,12 @@ export default {
   props: ["delegatorAddress"],
   computed: {
     total() {
-      const totals =
-        this.available + this.delegated + this.unbonded + this.rewards + this.unbonded;
+      const totals = parseFloat(this.available) + parseFloat(this.delegated) + parseFloat(this.unbonded) + parseFloat(this.rewards) + parseFloat(this.unbonded);
 
       return totals;
     },
     totalUsd() {
-      return parseInt(this.total * this.price);
+      return parseFloat(this.total * this.price);
     }
   },
   methods: {
@@ -76,20 +75,18 @@ export default {
         return it.denom === REALDENOM ? acc + parseInt(it.amount) : acc;
       }, 0);
 
-      this.available = parseFloat(rewarded / DIVISOR);
+      this.available = parseFloat(rewarded / DIVISOR).toFixed(4);
     },
     async getRewards() {
       const response = await axios.get(
-        `${LCD}/distribution/delegators/${
+        `${LCD}/distribution/${
           this.delegatorAddress
         }/rewards`
       );
 
-      const rewarded = await response.data.reduce((acc, it) => {
-        return it.denom === REALDENOM ? acc + parseInt(it.amount) : acc;
-      }, 0);
+      const rewarded = await response.data.total[0].amount;
 
-      this.rewards = parseFloat(rewarded / DIVISOR);
+      this.rewards = parseFloat(rewarded / DIVISOR).toFixed(4);
     },
     async getDelegated() {
       const response = await axios.get(
@@ -99,10 +96,10 @@ export default {
       );
 
       const delegated = await response.data.reduce((acc, it) => {
-        return acc + parseInt(it.shares);
+        return acc + parseFloat(it.shares * DIVISOR);
       }, 0);
 
-      this.delegated = parseFloat(delegated / DIVISOR);
+      this.delegated = parseFloat(delegated / DIVISOR).toFixed(4);
     },
     async getUnbonded() {
       const response = await axios.get(
@@ -112,14 +109,14 @@ export default {
       );
 
       const unbonded = await response.data.reduce((acc, it) => {
-        return acc + parseInt(it.entries[0].balance);
+        return acc + parseFloat(it.entries[0].balance * DIVISOR);
       }, 0);
 
-      this.unbonded = parseFloat(unbonded / DIVISOR);
+      this.unbonded = parseFloat(unbonded / DIVISOR).toFixed(4);
     },
     async getPrice() {
       const response = await axios.get(
-        "https://api.coingecko.com/api/v3/coins/iris"
+        "https://api.coingecko.com/api/v3/coins/iris-network"
       );
 
       this.price = parseFloat(response.data.market_data.current_price.usd);

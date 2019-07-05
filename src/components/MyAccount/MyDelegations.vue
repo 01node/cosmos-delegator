@@ -9,21 +9,21 @@
 
       <v-data-table id="first" :headers="headers" :items="delegations" :dark="dark">
         <template v-slot:items="props">
-          <tr :active="props.item.selected" :key="props.item.validator_address">
+          <tr :active="props.item.selected" :key="props.item.validator_addr">
             <td>
-              <validator-item :operator_address="props.item.validator_address"/>
+              <validator-item :operator_address="props.item.validator_addr"/>
             </td>
             <td class="text-xs-right" v-text="formatShares(props.item.shares)"></td>
             <td>
               <button
                 class="btn btn-danger btn-link p-1 mr-2"
-                @click="unbond(props.item.validator_address)"
+                @click="unbond(props.item.validator_addr)"
               >
                 <i class="fas fa-wallet"></i> UN
               </button>
               <button
                 class="btn btn-success btn-link p-1"
-                @click="redelegate(props.item.validator_address)"
+                @click="redelegate(props.item.validator_addr)"
               >
                 <i class="fas fa-sync"></i> RE
               </button>
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { DENOM, DIVISOR, formatNumber } from "@/utils/helpers";
+import { DENOM, DIVISOR, formatNumber, LCD } from "@/utils/helpers";
 import axios from "axios";
 
 import ValidatorItem from "@/components/MyAccount/ValidatorItem.vue";
@@ -105,7 +105,7 @@ export default {
   async beforeMount() {
     try {
       const response = await axios.get(
-        `https://sentryl1.01node.com/staking/delegators/${
+        `${LCD}/stake/delegators/${
           this.delegatorAddress
         }/delegations`
       );
@@ -121,7 +121,7 @@ export default {
   },
   methods: {
     formatShares(number) {
-      return formatNumber(number / DIVISOR) + " " + DENOM + "s";
+      return parseFloat(number).toFixed(4) + " " + DENOM + "s";
     },
     redelegate(validatorAddress) {
       this.re.validator = validatorAddress;
