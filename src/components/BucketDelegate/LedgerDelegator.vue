@@ -377,7 +377,7 @@ export default {
             validator_addr: item.operator_address,
             delegation: {
               denom: DENOM,
-              amount: String((this.delegateValue * 1000).toString() + '000000000000000'),
+              amount: String((delegateVal * 1000).toString() + '000000000000000'),
             },
           },
         }

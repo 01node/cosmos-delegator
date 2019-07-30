@@ -160,9 +160,11 @@ export default {
   computed: {
     ...mapGetters(['validators']),
     shares() {
-      const sharesData = this.delegations.find(item => item.validator_address === this.from);
+      const sharesData = this.delegations.find(item => item.validator_addr === this.from);
+
+      //console.log(this.delegations);
       if (sharesData !== -1) {
-        return parseFloat(sharesData.shares / DIVISOR);
+        return parseFloat(sharesData.shares);
       }
 
       return 0;
@@ -199,13 +201,10 @@ export default {
           {
             type: 'cosmos-sdk/MsgBeginRedelegate',
             value: {
-              delegator_address: this.delegatorAddress,
+              delegator_addr: this.delegatorAddress,
               validator_src_address: this.from,
               validator_dst_address: this.to,
-              amount: {
-                denom: REALDENOM,
-                amount: String(this.amount * DIVISOR)
-              }
+              shares_amount: String(this.amount * DIVISOR)
             }
           }
         ];

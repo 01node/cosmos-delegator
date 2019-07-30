@@ -29,7 +29,7 @@
 
 <script >
 import { mapGetters } from 'vuex';
-import { getDelegatorAddress, getSelfBonded, DENOM, DIVISOR } from '@/utils/helpers.js';
+import { getSelfBonded, DENOM, DIVISOR } from '@/utils/helpers.js';
 
 import numbro from 'numbro';
 

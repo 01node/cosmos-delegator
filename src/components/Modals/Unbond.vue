@@ -10,7 +10,7 @@
         <div class="card-body">
           <div class="form-group">
             <label>Amount</label>
-            <input v-model="amount" type="number" step="0.001" class="form-control">
+            <input v-model="amount" type="number" step="0.001" class="form-control" />
             <span class="maxShares" @click="addMax">Max: {{ shares }} {{ DENOM }}s</span>
           </div>
         </div>
@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import Account from "@/components/Account.vue";
-import { DENOM, REALDENOM, DIVISOR } from "@/utils/helpers";
+import Account from '@/components/Account.vue';
+import { DENOM, REALDENOM, DIVISOR } from '@/utils/helpers';
 
 export default {
   data() {
@@ -35,13 +35,11 @@ export default {
       amount: 0
     };
   },
-  props: ["dialog", "from", "delegatorAddress", "delegations"],
+  props: ['dialog', 'from', 'delegatorAddress', 'delegations'],
   components: { Account },
   computed: {
     shares() {
-      const sharesData = this.delegations.find(
-        item => item.validator_addr === this.from
-      );
+      const sharesData = this.delegations.find(item => item.validator_addr === this.from);
       if (sharesData !== -1) {
         return parseFloat(sharesData.shares);
       }
@@ -59,7 +57,7 @@ export default {
       },
       set: function(value) {
         if (!value) {
-          this.$emit("close");
+          this.$emit('close');
         }
       }
     }
@@ -71,19 +69,16 @@ export default {
     async generateTransaction() {
       const txMessage = [
         {
-          type: "cosmos-sdk/MsgUndelegate",
+          type: 'cosmos-sdk/MsgBeginUnbonding',
           value: {
             delegator_addr: this.delegatorAddress,
             validator_addr: this.from,
-            amount: {
-              denom: REALDENOM,
-              amount: String(this.amount * DIVISOR)
-            }
+            shares_amount: String(this.amount * DIVISOR)
           }
         }
       ];
-      this.$emit("generated-messages", txMessage);
-      this.$emit("close");
+      this.$emit('generated-messages', txMessage);
+      this.$emit('close');
     }
   }
 };
