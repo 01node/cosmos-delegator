@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3 ml-auto">
-          <h1 class="title">Cosmos Delegator</h1>
+          <h1 class="title">Kava Delegator</h1>
           <p>Powered by</p>
           <a href="https://01node.com" target="_blank">
             <img

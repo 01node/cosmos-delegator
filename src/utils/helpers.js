@@ -2,16 +2,16 @@ import bech32 from 'bech32';
 import axios from 'axios';
 
 const DIVISOR = 1000000;
-const DENOM = 'ATOM';
-const REALDENOM = 'uatom';
-const LCD = 'https://sentryl1.01node.com';
+const DENOM = 'KAVA';
+const REALDENOM = 'kava';
+const LCD = 'https://kava-relay.01node.com';
 const SETTINGS = {
-  bech32PrefixAccAddr: 'cosmos',
-  bech32PrefixAccPub: 'cosmospub',
-  bech32PrefixValAddr: 'cosmosvaloper',
-  bech32PrefixValPub: 'cosmosvaloperpub',
-  bech32PrefixConsAddr: 'cosmosvalcons',
-  bech32PrefixConsPub: 'cosmosvalconspub'
+  bech32PrefixAccAddr: 'kava',
+  bech32PrefixAccPub: 'kavapub',
+  bech32PrefixValAddr: 'kavavaloper',
+  bech32PrefixValPub: 'kavavaloperpub',
+  bech32PrefixConsAddr: 'kavavalcons',
+  bech32PrefixConsPub: 'kavavalconspub'
 };
 
 const formatNumber = num => {

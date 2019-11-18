@@ -10,7 +10,7 @@
       <div class="card-body">
         <div class="col-12 col-md-6" v-if="!delegated">
           <div class="form-group">
-            <label>Delegate amount (in ATOM)</label>
+            <label>Delegate amount (in KAVA)</label>
             <input type="number" v-model="delegateValue" value="0" placeholder="Enter amount" class="form-control" />
           </div>
           <div class="form-group">

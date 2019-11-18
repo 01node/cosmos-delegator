@@ -21,7 +21,7 @@
         <div class="navbar-collapse-header">
           <div class="row">
             <div class="col-6 collapse-brand">
-              <a>Cosmos Delegator</a>
+              <a>Kava Delegator</a>
             </div>
             <div class="col-6 collapse-close text-right">
               <button

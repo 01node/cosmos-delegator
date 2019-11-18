@@ -15,15 +15,9 @@
       </div>
       <div v-if="!delegationMethod" class="row d-flex justify-content-center">
         <ledger-selector v-on:method-select="selectDelegationMethod" />
-        <cli-selector v-on:method-select="selectDelegationMethod" />
       </div>
       <div v-if="delegationMethod === 'ledger'" class="row">
         <ledger-delegator :operator_address="validator.operator_address" />
-        <cli-selector v-on:method-select="selectDelegationMethod" />
-      </div>
-      <div v-if="delegationMethod === 'cli'" class="row">
-        <cli-delegator :operator_address="validator.operator_address" />
-        <ledger-selector v-on:method-select="selectDelegationMethod" />
       </div>
     </div>
     <div v-else class="container">

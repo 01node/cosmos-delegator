@@ -17,7 +17,7 @@
             </h1>
             <p
               class="text-white mb-3"
-            >The delegation of ATOMs to validators within the Cosmos Hub is a critical and vital part of the underlying security of the Hub that every ATOM holder is encouraged to partake in.</p>
+            >The delegation of ATOMs to validators within the Kava Hub is a critical and vital part of the underlying security of the Hub that every ATOM holder is encouraged to partake in.</p>
             <div class="btn-wrapper mb-3">
               <router-link to="/delegate" class="btn btn-success">
                 Delegate now

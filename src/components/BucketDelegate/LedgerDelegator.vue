@@ -21,9 +21,9 @@
             <li>
               <i
                 class="fas fa-lg fa-spin fa-spinner"
-                v-if="ledger && ledger.appDetails && ledger.appDetails.appName !== 'COSMOS'"
+                v-if="ledger && ledger.appDetails && ledger.appDetails.appName !== 'Kava'"
               ></i>
-              <i class="fas fa-lg fa-check-circle" v-else></i> Open the Cosmos Ledger application.
+              <i class="fas fa-lg fa-check-circle" v-else></i> Open the Kava Ledger application.
             </li>
             <li>
               <i

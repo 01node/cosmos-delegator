@@ -16,7 +16,7 @@
           </h1>
           <p
             class="text-white mb-3"
-          >IRISnet is a service infrastructure and protocol built using Cosmos SDK/Tendermint that facilitates construction of distributed business applications.</p>
+          >IRISnet is a service infrastructure and protocol built using Kava SDK/Tendermint that facilitates construction of distributed business applications.</p>
           <div class="btn-wrapper mb-3">
             <router-link to="/how-to-delegate" class="btn btn-success btn-link btn-sm p-0">
               Read more about delegation

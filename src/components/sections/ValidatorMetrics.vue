@@ -7,7 +7,7 @@
             <h1 class="profile-title font-weight-bold text-left">Validator Metrics</h1>
             <h5 class="text-on-back">Metrics</h5>
             <p class="profile-description text-left">
-              We created Validator Metrics for each active validator on Cosmos Network to help users decide easily where to delegate their tokens. We are researching every validator details and the compose a report composing of infrastructure, economics, communication, and experience.
+              We created Validator Metrics for each active validator on Kava Network to help users decide easily where to delegate their tokens. We are researching every validator details and the compose a report composing of infrastructure, economics, communication, and experience.
             </p>
             <div class="btn-wrapper pt-3">
                 <router-link to="/validators" class="btn btn-success"
@@ -24,7 +24,7 @@
         <div class="col-12 col-md-6">
           <h1 class="title">Validator Metrics</h1>
           <p>
-            We created Validator Metrics for each active validator on Cosmos Network to help users decide easily where to delegate their tokens. We are researching every validator details and the compose a report composing of infrastructure, economics, communication, and experience.
+            We created Validator Metrics for each active validator on Kava Network to help users decide easily where to delegate their tokens. We are researching every validator details and the compose a report composing of infrastructure, economics, communication, and experience.
           </p>
           <div class="row row-grid justify-content-center">
             <div class="col-12 text-center">

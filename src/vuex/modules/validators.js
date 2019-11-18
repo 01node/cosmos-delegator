@@ -10,19 +10,23 @@ export default () => {
   let goodReturns = [];
 
   axios
-    .get("https://sentryl1.01node.com/staking/validators?page=1")
+    .get("https://kava-relay.01node.com/staking/validators?page=1")
     .then(first => {
-      validators.push(...first.data);
+      console.log(first.data.result);
+      validators.push(...first.data.result);
 
       axios
-        .get("https://sentryl1.01node.com/staking/validators?page=2")
+        .get("https://kava-relay.01node.com/staking/validators?page=2")
         .then(second => {
-          validators.push(...second.data);
+          
+          validators.push(...second.data.result);
+
+          console.log(validators);
 
           axios
-            .get("https://sentryl1.01node.com/validatorsets/latest")
+            .get("https://kava-relay.01node.com/validatorsets/latest")
             .then(latest => {
-              const latestSet = latest.data.validators;
+              const latestSet = latest.data.result.validators;
 
               validators.map(validator => {
                 latestSet.filter(latest => {

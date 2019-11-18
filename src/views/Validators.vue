@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-md-5 text-left">
           <hr class="line-success" />
-          <h1>Cosmos Active Validators</h1>
+          <h1>Kava Active Validators</h1>
         </div>
       </div>
       <div class="row">

@@ -120,7 +120,7 @@
           <i class="fas fa-link"></i>
           <a
             class="btn btn-link btn-neutral"
-            href="https://www.irisplorer.io/#/tx?txHash={txHash}"
+            href="#/tx?txHash={txHash}"
             v-text="txHash"
           ></a>
         </div>
@@ -141,11 +141,11 @@ import { signatureImport } from "secp256k1";
 import * as wallet from "@/utils/cosmos-wallet";
 
 const DEFAULT_FEE = 0.3;
-const CHAIN_ID = "cosmoshub-2";
+const CHAIN_ID = "kava-2";
 const HDPATH = [44, 118, 0, 0, 0];
 const DEFAULT_GAS = 150000;
 const DEFAULT_GAS_PRICE = 0.025;
-const RPC_ADDRESS = "https://sentryl1.01node.com/";
+const RPC_ADDRESS = "https://kava-relay.01node.com/";
 
 export default {
   name: "ledger-delegator",
@@ -179,7 +179,7 @@ export default {
       this.ledger = new CosmosDelegateTool();
       this.ledger.transportDebug = true;
       this.ledger.checkAppInfo = true;
-      this.ledger.setNodeURL("https://sentryl1.01node.com/");
+      this.ledger.setNodeURL("https://kava-relay.01node.com/");
 
       try {
         this.connect();

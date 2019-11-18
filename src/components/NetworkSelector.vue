@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="current-network">
-      <a class="navbar-brand" href="/"> <span>Cosmos</span> Delegator </a>
+      <a class="navbar-brand" href="/"> <span>Kava</span> Delegator </a>
       <i class="fas fa-chevron-down network-changer" @click="changeNetwork"> network change</i>
 
       <div class="network-selector">
@@ -22,13 +22,13 @@ export default {
   data() {
     return {
       networks: [
-        /* {
+        {
           id: 'cosmos',
           title: 'Cosmos (cosmoshub-2)',
           logo: 'https://cosmos.network/img/cosmos-wordmark.6cbfcad2.svg',
           current: false,
           link: 'https://cosmos-delegator.01node.com'
-        }, */
+        },
         {
           id: 'iris',
           title: 'IRISnet (irishub)',

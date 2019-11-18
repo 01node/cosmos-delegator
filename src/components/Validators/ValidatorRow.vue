@@ -66,11 +66,13 @@ export default {
   async mounted() {
     let selfbond = await getSelfBonded(this.data.operator_address);
 
+    console.log(this.data);
+
     this.selfBonded = numbro(selfbond).format({ thousandSeparated: true });
 
     this.uptime = numbro(1).format({ output: 'percent' });
 
-    this.commissionRate = numbro(this.data.commission.rate).format({
+    this.commissionRate = numbro(this.data.commission.commission_rates.rate).format({
       output: 'percent',
       mantissa: 0
     });
