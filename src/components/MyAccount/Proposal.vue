@@ -116,10 +116,10 @@ export default {
             value: {
               proposal_id: this.proposal.id,
               depositor: this.depositor,
-              amount: {
+              amount: [{
                 denom: REALDENOM,
                 amount: String(this.amount * DIVISOR)
-              }
+              }]
             }
           }
         ];
