@@ -25,9 +25,9 @@ import Big from 'big.js';
 import secp256k1 from 'secp256k1';
 import txs from './cosmos-txs';
 
-const defaultHrp = 'cosmos';
+const defaultHrp = 'kava';
 
-const IrisDelegatorTool = function() {
+const KavaDelegatorTool = function() {
   // eslint-disable-next-line camelcase
   this.comm = comm_u2f;
   this.connected = false;
@@ -45,18 +45,18 @@ const IrisDelegatorTool = function() {
 };
 
 // eslint-disable-next-line no-unused-vars
-IrisDelegatorTool.prototype.setNodeURL = function(resturl) {
+KavaDelegatorTool.prototype.setNodeURL = function(resturl) {
   this.resturl = resturl;
 };
 
 // Switch transport to HID (useful for local testing)
-IrisDelegatorTool.prototype.switchTransportToHID = function() {
+KavaDelegatorTool.prototype.switchTransportToHID = function() {
   // eslint-disable-next-line camelcase
   this.comm = comm_node;
 };
 
 // Switch transport to U2F (can run in browser/client side but requires HTTPS)
-IrisDelegatorTool.prototype.switchTransportToU2F = function() {
+KavaDelegatorTool.prototype.switchTransportToU2F = function() {
   // eslint-disable-next-line camelcase
   this.comm = comm_u2f;
 };
@@ -103,7 +103,7 @@ function nodeURL(cdt) {
 }
 
 // Detect when a ledger device is connected and verify the cosmos app is running.
-IrisDelegatorTool.prototype.connect = async function() {
+KavaDelegatorTool.prototype.connect = async function() {
   this.connected = false;
   this.lastError = null;
 
@@ -154,7 +154,7 @@ function connectedOrThrow(cdt) {
 }
 
 // Returns a signed transaction ready to be relayed
-IrisDelegatorTool.prototype.sign = async function(unsignedTx, txContext) {
+KavaDelegatorTool.prototype.sign = async function(unsignedTx, txContext) {
   connectedOrThrow(this);
   if (typeof txContext.path === 'undefined') {
     this.lastError = 'context should include the account path';
@@ -177,7 +177,7 @@ IrisDelegatorTool.prototype.sign = async function(unsignedTx, txContext) {
 };
 
 // Retrieve public key and bech32 address
-IrisDelegatorTool.prototype.retrieveAddress = async function(account, index) {
+KavaDelegatorTool.prototype.retrieveAddress = async function(account, index) {
   connectedOrThrow(this);
 
   const path = [44, 118, account, 0, index];
@@ -202,7 +202,7 @@ IrisDelegatorTool.prototype.retrieveAddress = async function(account, index) {
 
 // Scan multiple address in a derivation path range (44’/118’/X/0/Y)
 // eslint-disable-next-line max-len
-IrisDelegatorTool.prototype.scanAddresses = async function(
+KavaDelegatorTool.prototype.scanAddresses = async function(
   minAccount,
   maxAccount,
   minIndex,
@@ -222,7 +222,7 @@ IrisDelegatorTool.prototype.scanAddresses = async function(
   return answer;
 };
 
-IrisDelegatorTool.prototype.retrieveValidators = async function() {
+KavaDelegatorTool.prototype.retrieveValidators = async function() {
   const url = `${nodeURL(this)}/staking/validators`;
   return axios.get(url).then(
     r => {
@@ -240,8 +240,10 @@ IrisDelegatorTool.prototype.retrieveValidators = async function() {
   );
 };
 
-IrisDelegatorTool.prototype.getAccountInfo = async function(addr) {
-  const url = `${nodeURL(this)}/auth/accounts/${addr.bech32}`;
+KavaDelegatorTool.prototype.getAccountInfo = async function(addr) {
+  const url = `${nodeURL(
+    this
+  )}/auth/accounts/${addr.bech32}`;
 
   const txContext = {
     sequence: '0',
@@ -252,17 +254,42 @@ IrisDelegatorTool.prototype.getAccountInfo = async function(addr) {
   return axios.get(url).then(
     r => {
       try {
-        if (typeof r.data !== 'undefined') {
-          txContext.sequence = Number(r.data.value.sequence).toString();
-          txContext.accountNumber = Number(r.data.value.account_number).toString();
+        if (typeof r.data.result !== 'undefined') {
 
-          if (r.data.value.coins !== null) {
-            let coins = r.data.value.coins.reduce((acc,it) => {
-              return it.denom === 'uatom' ? acc + parseInt(it.amount) : acc;
-            }, 0);
+          if (r.data.result.type === 'cosmos-sdk/Account') {
+            txContext.sequence = Number(r.data.result.value.sequence).toString();
+            txContext.accountNumber = Number(r.data.result.value.account_number).toString();
 
-            txContext.balanceIris = Number(coins / 1000000);
+            if (r.data.result.value.coins !== null) {
+              let coins = r.data.result.value.coins.reduce((acc, it) => {
+                return it.denom === 'ukava' ? acc + parseInt(it.amount) : acc;
+              }, 0);
+
+              txContext.balanceIris = Number(coins / 1000000);
+            }
+          }else{
+ 
+            txContext.sequence = Number(
+              r.data.result.value.PeriodicVestingAccount.BaseVestingAccount.BaseAccount.sequence
+            ).toString();
+
+            txContext.accountNumber = Number(
+              r.data.result.value.PeriodicVestingAccount.BaseVestingAccount
+                .BaseAccount.account_number
+            ).toString();
+
+            if (r.data.result.value.PeriodicVestingAccount.BaseVestingAccount.BaseAccount.coins !== null) {
+              let coins = r.data.result.value.PeriodicVestingAccount.BaseVestingAccount.BaseAccount.coins.reduce(
+                (acc, it) => {
+                  return it.denom === 'ukava' ? acc + parseInt(it.amount) : acc;
+                },
+                0
+              );
+
+              txContext.balanceIris = Number(coins / 1000000);
+            }
           }
+            
         }
       } catch (e) {
         console.log('Error ', e, ' returning defaults');
@@ -273,7 +300,7 @@ IrisDelegatorTool.prototype.getAccountInfo = async function(addr) {
   );
 };
 
-IrisDelegatorTool.prototype.getAccountDelegations = async function(
+KavaDelegatorTool.prototype.getAccountDelegations = async function(
   validators,
   addr
 ) {
@@ -325,7 +352,7 @@ IrisDelegatorTool.prototype.getAccountDelegations = async function(
 
 // Retrieve atom balances from the network for a list of account
 // Retrieve delegated/not-delegated balances for each account
-IrisDelegatorTool.prototype.retrieveBalances = async function(addressList) {
+KavaDelegatorTool.prototype.retrieveBalances = async function(addressList) {
   const validators = await this.retrieveValidators();
 
   // Get all balances
@@ -353,7 +380,7 @@ IrisDelegatorTool.prototype.retrieveBalances = async function(addressList) {
 
 // Creates a new delegation tx based on the input parameters
 // this function expect that retrieve balances has been called before
-IrisDelegatorTool.prototype.txCreateDelegate = async function(
+KavaDelegatorTool.prototype.txCreateDelegate = async function(
   txContext,
   validatorBech32,
   uatomAmount,
@@ -377,7 +404,7 @@ IrisDelegatorTool.prototype.txCreateDelegate = async function(
 
 // Creates a new staking tx based on the input parameters
 // this function expect that retrieve balances has been called before
-IrisDelegatorTool.prototype.txCreateRedelegate = async function(
+KavaDelegatorTool.prototype.txCreateRedelegate = async function(
   txContext,
   validatorSourceBech32,
   validatorDestBech32,
@@ -409,7 +436,7 @@ IrisDelegatorTool.prototype.txCreateRedelegate = async function(
 
 // Creates a new undelegation tx based on the input parameters
 // this function expect that retrieve balances has been called before
-IrisDelegatorTool.prototype.txCreateUndelegate = async function(
+KavaDelegatorTool.prototype.txCreateUndelegate = async function(
   txContext,
   validatorBech32,
   uatomAmount,
@@ -432,7 +459,7 @@ IrisDelegatorTool.prototype.txCreateUndelegate = async function(
 };
 
 // Relays a signed transaction and returns a transaction hash
-IrisDelegatorTool.prototype.txSubmit = async function(signedTx) {
+KavaDelegatorTool.prototype.txSubmit = async function(signedTx) {
   const txBody = {
     tx: signedTx.value,
     mode: 'async'
@@ -445,9 +472,9 @@ IrisDelegatorTool.prototype.txSubmit = async function(signedTx) {
 };
 
 // Retrieve the status of a transaction hash
-IrisDelegatorTool.prototype.txStatus = async function(txHash) {
+KavaDelegatorTool.prototype.txStatus = async function(txHash) {
   const url = `${nodeURL(this)}/txs/${txHash}`;
   return axios.get(url).then(r => r.data, e => wrapError(this, e));
 };
 
-export default IrisDelegatorTool;
+export default KavaDelegatorTool;

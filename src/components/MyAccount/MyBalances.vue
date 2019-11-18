@@ -69,10 +69,10 @@ export default {
   methods: {
     async getAvailable() {
       const response = await axios.get(
-        "https://sentryl1.01node.com/bank/balances/" + this.delegatorAddress
+        "https://kava-relay.01node.com/bank/balances/" + this.delegatorAddress
       );
 
-      const rewarded = await response.data.reduce((acc, it) => {
+      const rewarded = await response.data.result.reduce((acc, it) => {
         return it.denom === REALDENOM ? acc + parseInt(it.amount) : acc;
       }, 0);
 
@@ -80,12 +80,12 @@ export default {
     },
     async getRewards() {
       const response = await axios.get(
-        `https://sentryl1.01node.com/distribution/delegators/${
+        `https://kava-relay.01node.com/distribution/delegators/${
           this.delegatorAddress
         }/rewards`
       );
 
-      const rewarded = await response.data.reduce((acc, it) => {
+      const rewarded = await response.data.result.reduce((acc, it) => {
         return it.denom === REALDENOM ? acc + parseInt(it.amount) : acc;
       }, 0);
 
@@ -93,12 +93,12 @@ export default {
     },
     async getDelegated() {
       const response = await axios.get(
-        `https://sentryl1.01node.com/staking/delegators/${
+        `https://kava-relay.01node.com/staking/delegators/${
           this.delegatorAddress
         }/delegations`
       );
 
-      const delegated = await response.data.reduce((acc, it) => {
+      const delegated = await response.data.result.reduce((acc, it) => {
         return acc + parseInt(it.shares);
       }, 0);
 
@@ -106,12 +106,12 @@ export default {
     },
     async getUnbonded() {
       const response = await axios.get(
-        `https://sentryl1.01node.com/staking/delegators/${
+        `https://kava-relay.01node.com/staking/delegators/${
           this.delegatorAddress
         }/unbonding_delegations`
       );
 
-      const unbonded = await response.data.reduce((acc, it) => {
+      const unbonded = await response.data.result.reduce((acc, it) => {
         return acc + parseInt(it.entries[0].balance);
       }, 0);
 
@@ -119,7 +119,7 @@ export default {
     },
     async getPrice() {
       const response = await axios.get(
-        "https://api.coingecko.com/api/v3/coins/cosmos"
+        "https://api.coingecko.com/api/v3/coins/kava"
       );
 
       this.price = parseFloat(response.data.market_data.current_price.usd);

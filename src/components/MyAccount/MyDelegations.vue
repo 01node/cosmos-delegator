@@ -105,7 +105,7 @@ export default {
   async beforeMount() {
     try {
       const response = await axios.get(
-        `https://sentryl1.01node.com/staking/delegators/${
+        `https://kava-relay.01node.com/staking/delegators/${
           this.delegatorAddress
         }/delegations`
       );

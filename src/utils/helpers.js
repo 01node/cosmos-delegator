@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const DIVISOR = 1000000;
 const DENOM = 'KAVA';
-const REALDENOM = 'kava';
+const REALDENOM = 'ukava';
 const LCD = 'https://kava-relay.01node.com';
 const SETTINGS = {
   bech32PrefixAccAddr: 'kava',

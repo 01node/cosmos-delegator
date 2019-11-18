@@ -53,7 +53,7 @@ export default {
     },
     async generateWithdraw() {
       let response = await axios.get(
-        `https://sentryl1.01node.com/staking/delegators/${this.delegatorAddress}/delegations`
+        `https://kava-relay.01node.com/staking/delegators/${this.delegatorAddress}/delegations`
       );
       let delegations = await response.data;
 
@@ -75,7 +75,7 @@ export default {
   async beforeMount() {
     try {
       const response = await axios.get(
-        `https://sentryl1.01node.com/distribution/delegators/${this.delegatorAddress}/rewards`
+        `https://kava-relay.01node.com/distribution/delegators/${this.delegatorAddress}/rewards`
       );
 
       const rewarded = await response.data.reduce((acc, it) => {

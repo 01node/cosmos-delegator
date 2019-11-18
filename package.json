@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --https",
     "build": "npm run keybase-cache && vue-cli-service build",
     "keybase-cache": "node ./tasks/keybase.js",
     "deploy:test": "firebase deploy --only hosting --project irisnet-delegator-test",

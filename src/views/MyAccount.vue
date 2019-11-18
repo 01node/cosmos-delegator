@@ -71,6 +71,7 @@
               @generated-messages="handleGeneratedMessages"
             />
             <my-transactions :delegatorAddress="address.bech32" />
+            <governance v-on:open-proposal="openProposal" />
           </div>
           <!-- /DELEGATIONS -->
 
@@ -107,6 +108,19 @@
           </div>
           <!-- /LEDGER ACTIONS -->
         </div>
+
+        <div class="row" v-if="openedProposal">
+          <div class="col-12 section">
+            <div class="card">
+              <div class="card-header">
+                <h2>Proposal Details</h2>
+              </div>
+              <div class="card-body">
+                <proposal :proposal="openedProposal" :depositor="address.bech32" @generate-deposit="handleGeneratedMessages" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -117,19 +131,22 @@
 import CosmosDelegateTool from '@/utils/cosmos-delegation-tool';
 import { DENOM, REALDENOM, DIVISOR } from '@/utils/helpers';
 import { signatureImport } from 'secp256k1';
+import axios from 'axios';
 import * as wallet from '@/utils/cosmos-wallet';
 
 import MyBalances from '@/components/MyAccount/MyBalances.vue';
 import MyDelegations from '@/components/MyAccount/MyDelegations.vue';
 import MyRewards from '@/components/MyAccount/MyRewards.vue';
 import MyTransactions from '@/components/MyAccount/MyTransactions.vue';
+import Governance from '@/components/MyAccount/Governance.vue';
+import Proposal from '@/components/MyAccount/Proposal.vue';
 
 const DEFAULT_FEE = 0.3;
-const CHAIN_ID = 'cosmoshub-2';
+const CHAIN_ID = 'kava-2';
 const HDPATH = [44, 118, 0, 0, 0];
 const DEFAULT_GAS = 150000;
 const DEFAULT_GAS_PRICE = 0.025;
-const RPC_ADDRESS = 'https://sentryl1.01node.com/';
+const RPC_ADDRESS = 'https://kava-relay.01node.com/';
 
 export default {
   name: 'my-account',
@@ -146,16 +163,28 @@ export default {
       delegateError: null,
       txMessages: [],
       txMessage: null,
+      proposals: [],
+      openedProposal: null,
       type: 'normal'
     };
   },
-  components: { MyBalances, MyDelegations, MyRewards, MyTransactions },
+  components: { MyBalances, MyDelegations, MyRewards, MyTransactions, Governance, Proposal },
   methods: {
+    openProposal(id) {
+      this.openedProposal = this.proposals.find(function(item) {
+        return item.id === id;
+      });
+      return true;
+    },
     async init() {
       this.ledger = new CosmosDelegateTool();
       this.ledger.transportDebug = true;
       this.ledger.checkAppInfo = true;
-      this.ledger.setNodeURL('https://sentryl1.01node.com/');
+      this.ledger.setNodeURL('https://kava-relay.01node.com/');
+
+      const response = await axios.get(`https://kava-relay.01node.com/gov/proposals`);
+
+      this.proposals = await response.data.result;
 
       try {
         this.connect();
@@ -276,6 +305,7 @@ export default {
       }
     },
     async handleGeneratedMessages(payload) {
+      this.openedProposal = false;
       this.txMessages.push(...payload);
 
       const defaultTx = {

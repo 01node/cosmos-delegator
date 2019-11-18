@@ -14,7 +14,7 @@
  *  limitations under the License.
  ******************************************************************************* */
 
-const DEFAULT_DENOM = 'uatom';
+const DEFAULT_DENOM = 'ukava';
 const DEFAULT_GAS = 6000000;
 //const DEFAULT_GAS_PRICE = 0.025;
 const DEFAULT_MEMO = '';

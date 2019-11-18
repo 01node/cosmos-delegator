@@ -143,7 +143,7 @@ import * as wallet from "@/utils/cosmos-wallet";
 const DEFAULT_FEE = 0.3;
 const CHAIN_ID = "kava-2";
 const HDPATH = [44, 118, 0, 0, 0];
-const DEFAULT_GAS = 150000;
+const DEFAULT_GAS = 250000;
 const DEFAULT_GAS_PRICE = 0.025;
 const RPC_ADDRESS = "https://kava-relay.01node.com/";
 
