@@ -64,7 +64,7 @@ export default {
 
     commissionRate() {
       if (this.validator !== undefined) {
-        return parseInt(this.validator.commission.rate * 100);
+        return parseInt(this.validator.commission.commission_rates.rate * 100);
       }
 
       return null;

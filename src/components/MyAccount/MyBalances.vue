@@ -32,6 +32,15 @@
             </div>
           </th>
         </tr>
+        <tr v-if="vesting !== false">
+          <td colspan="2">
+            <div class="mb-4">Vesting start<br/>
+            {{ startFormatted }}
+            </div>
+            <div><b>Vesting</b></div>
+            <vesting-balance v-for="(vest,index) in vesting" :key="index" :start="vestingStart" :amount="vest.amount[0].amount" :length="vest.length"/>
+          </td>
+        </tr>
       </table>
     </div>
   </div>
@@ -40,6 +49,8 @@
 
 <script>
 import axios from "axios";
+import moment from "moment";
+import VestingBalance from '@/components/MyAccount/VestingBalance.vue';
 
 import { DENOM, REALDENOM, DIVISOR } from "@/utils/helpers";
 export default {
@@ -47,14 +58,19 @@ export default {
   data() {
     return {
       DENOM,
+      DIVISOR,
       price: 0,
       available: 0,
       delegated: 0,
       unbonded: 0,
-      rewards: 0
+      rewards: 0,
+      vesting: false,
+      vestingStart: null,
+      startFormatted: null
     };
   },
   props: ["delegatorAddress"],
+  components: {VestingBalance},
   computed: {
     total() {
       const totals =
@@ -123,6 +139,19 @@ export default {
       );
 
       this.price = parseFloat(response.data.market_data.current_price.usd);
+    },
+    async getVested() {
+      const response = await axios.get(
+        `https://kava-relay.01node.com/auth/accounts/${this.delegatorAddress}`
+      );
+
+      const type = await response.data.result.type;
+
+      if(type === 'cosmos-sdk/ValidatorVestingAccount') {
+        this.vesting = response.data.result.value.PeriodicVestingAccount.vesting_periods;
+        this.vestingStart = response.data.result.value.PeriodicVestingAccount.start_time;
+        this.startFormatted = moment(this.vestingStart * 1000).format('DD.MM.YYYY');
+      }
     }
   },
   beforeMount() {
@@ -131,6 +160,7 @@ export default {
     this.getDelegated();
     this.getPrice();
     this.getUnbonded();
+    this.getVested();
   }
 };
 </script>

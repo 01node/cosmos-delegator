@@ -11,7 +11,7 @@ const bip32 = require(`bip32`);
 const bech32 = require(`bech32`);
 const secp256k1 = require(`secp256k1`);
 
-const hdPathAtom = `m/44'/118'/0'/0/0`; // key controlling ATOM allocation
+const hdPathAtom = `m/44'/118'/0'/0/0`; // key controlling KAVA allocation
 
 const standardRandomBytesFunc = x =>
   CryptoJS.lib.WordArray.random(x).toString();

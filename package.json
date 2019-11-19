@@ -18,6 +18,7 @@
     "crypto-js": "^3.1.9-1",
     "firebase": "^6.1.1",
     "ledger-cosmos-js": "^1.0.0",
+    "moment": "^2.24.0",
     "numbro": "^2.1.2",
     "secp256k1": "^3.7.0",
     "vue": "^2.6.10",

@@ -2,7 +2,7 @@
   <div>
     <div
       class="home"
-      v-if="!ledger || this.ledger.connected === false || (ledger && address.bech32 === undefined)"
+      v-if="!ledger || ledger.connected === false || (ledger && address.bech32 === undefined)"
     >
       <div class="page-header">
         <img src="@/assets/blob.png" class="path" />
@@ -153,8 +153,14 @@ export default {
   data() {
     return {
       DENOM,
-      ledger: false,
-      address: {},
+      /* ledger: {
+        connected: true
+      },
+      address: {
+        bech32: 'kava1v5hrqlv8dqgzvy0pwzqzg0gxy899rm4khzp04j'
+      }, */
+      ledger:false,
+      address:false,
       accountInfo: {},
       errorMessage: null,
       waitConfirm: false,

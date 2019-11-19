@@ -8,6 +8,9 @@
       >
         Deposit
       </button>
+      <button class="btn btn-primary" @click="openVote" v-if="proposal.proposal_status === 'VotingPeriod' && !vote">
+        Vote
+      </button>
     </div>
     <div class="deposit-form" v-if="deposit === true">
       <div v-if="!depositLoading">
@@ -20,6 +23,23 @@
         Loading...
       </div>
     </div>
+    <div class="vote-form" v-if="vote === true">
+      <div v-if="!voteLoading">
+          <label>Select your vote</label>
+        <select v-model="selectedOption" class="form-control mb-2">
+          <option value="Yes">yes</option>
+          <option value="Abstain">abstain</option>
+          <option value="No">no</option>
+          <option value="NoWithVeto">no with veto</option>
+        </select>
+
+        <button class="btn btn-primary" @click="generateVote">Start Vote</button>
+      </div>
+      <div v-else>
+        Loading...
+      </div>
+    </div>
+
     <table class="table">
       <tr>
         <td>Proposal ID</td>
@@ -95,6 +115,9 @@ export default {
       proposer: null,
       deposit: false,
       depositLoading: false,
+      vote: false,
+      voteLoading: false,
+      selectedOption: '',
       amount: 0
     };
   },
@@ -108,6 +131,23 @@ export default {
   methods: {
     openDeposit() {
       this.deposit = true;
+    },
+    openVote() {
+      this.vote = true;
+    },
+    generateVote() {
+       const txMessage = [
+          {
+            type: 'cosmos-sdk/MsgVote',
+            value: {
+              proposal_id: this.proposal.id,
+              voter: this.depositor,
+              option: this.selectedOption
+            }
+          }
+        ];
+
+      return this.$emit('generate-deposit', txMessage);
     },
     generateDeposit() {
        const txMessage = [
