@@ -17,7 +17,7 @@ export default {
             return numbro(this.amount / 1000000).format({thousandSeparated: true, mantissa: 2});
         },
         remainingVesting() {
-            const a = moment(this.start * 1000);
+            const a = moment();
             const b = moment((parseInt(this.start) + parseInt(this.length)) * 1000);           
             return a.to(b);
         },

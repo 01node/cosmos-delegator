@@ -153,14 +153,14 @@ export default {
   data() {
     return {
       DENOM,
-      /* ledger: {
+       ledger: {
         connected: true
       },
       address: {
         bech32: 'kava1v5hrqlv8dqgzvy0pwzqzg0gxy899rm4khzp04j'
-      }, */
-      ledger:false,
-      address:false,
+      }, 
+      //ledger:false,
+      //address:false,
       accountInfo: {},
       errorMessage: null,
       waitConfirm: false,
