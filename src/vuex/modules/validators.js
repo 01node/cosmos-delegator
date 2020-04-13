@@ -10,10 +10,10 @@ export default () => {
   let goodReturns = [];
 
   axios.get('https://terral.01node.com/staking/validators').then(first => {
-    validators.push(...first.data);
+    validators.push(...first.data.result);
 
     axios.get('https://terral.01node.com/validatorsets/latest').then(latest => {
-      const latestSet = latest.data.validators;
+      const latestSet = latest.data.result.validators;
 
       validators.map(validator => {
         latestSet.filter(latest => {
