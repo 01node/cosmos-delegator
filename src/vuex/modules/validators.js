@@ -12,17 +12,17 @@ export default () => {
   axios
     .get("https://sentryl1.01node.com/staking/validators?page=1")
     .then(first => {
-      validators.push(...first.data);
+      validators.push(...first.data.result);
 
       axios
         .get("https://sentryl1.01node.com/staking/validators?page=2")
         .then(second => {
-          validators.push(...second.data);
+          validators.push(...second.data.result);
 
           axios
             .get("https://sentryl1.01node.com/validatorsets/latest")
             .then(latest => {
-              const latestSet = latest.data.validators;
+              const latestSet = latest.data.result.validators;
 
               validators.map(validator => {
                 latestSet.filter(latest => {

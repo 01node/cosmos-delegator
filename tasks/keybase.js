@@ -41,7 +41,7 @@ function getKeybaseProfileFromResponse(keybaseId, { data }) {
 async function main() {
   const validators = (await axios(
     `https://sentryl1.01node.com/staking/validators`
-  )).data;
+  )).data.result;
   const cache = {};
   await Promise.all(
     validators.map(async validator => {
