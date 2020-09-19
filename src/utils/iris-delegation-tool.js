@@ -13,13 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ******************************************************************************* */
-import {
-  // eslint-disable-next-line camelcase
-  App,
-  comm_node,
-  comm_u2f,
-  Tools
-} from 'ledger-cosmos-js';
+import CosmosApp from 'ledger-cosmos-js';
 import axios from 'axios';
 import Big from 'big.js';
 import secp256k1 from 'secp256k1';
@@ -29,7 +23,6 @@ const defaultHrp = 'iaa';
 
 const IrisDelegatorTool = function() {
   // eslint-disable-next-line camelcase
-  this.comm = comm_u2f;
   this.connected = false;
 
   this.lastError = 'No error';

@@ -68,10 +68,10 @@ export default {
   methods: {
     async getAvailable() {
       const response = await axios.get(
-        `${LCD}/bank/balances/` + this.delegatorAddress
+        `${LCD}/bank/accounts/` + this.delegatorAddress
       );
 
-      const rewarded = await response.data.reduce((acc, it) => {
+      const rewarded = await response.data.value.coins.reduce((acc, it) => {
         return it.denom === REALDENOM ? acc + parseInt(it.amount) : acc;
       }, 0);
 
@@ -84,9 +84,14 @@ export default {
         }/rewards`
       );
 
-      const rewarded = await response.data.total[0].amount;
+        const rewarded = await response.data.total;
 
-      this.rewards = parseFloat(rewarded / DIVISOR).toFixed(4);
+      if (rewarded.length > 0) {
+        this.rewards = parseFloat(rewarded[0].amount / DIVISOR).toFixed(
+          4
+        );
+      }
+
     },
     async getDelegated() {
       const response = await axios.get(
@@ -105,7 +110,7 @@ export default {
       const response = await axios.get(
         `${LCD}/stake/delegators/${
           this.delegatorAddress
-        }/unbonding_delegations`
+        }/unbonding-delegations`
       );
 
       const unbonded = await response.data.reduce((acc, it) => {

@@ -21,18 +21,18 @@
 
 
 <script>
-import axios from 'axios';
-import { DENOM, DIVISOR, REALDENOM, formatNumber, LCD } from '@/utils/helpers';
+import axios from "axios";
+import { DENOM, DIVISOR, REALDENOM, formatNumber, LCD } from "@/utils/helpers";
 
 export default {
   data() {
     return {
       DENOM,
       rewards: 0,
-      loading: true
+      loading: true,
     };
   },
-  props: ['delegatorAddress'],
+  props: ["delegatorAddress"],
   methods: {
     async generateReinvest() {
       /* let response = await axios.get(
@@ -59,18 +59,18 @@ export default {
 
       let txMessage;
 
-      txMessage = delegations.slice(0,5).map(item => {
+      txMessage = delegations.slice(0, 5).map((item) => {
         return {
-          type: 'cosmos-sdk/MsgWithdrawDelegationReward',
+          type: "cosmos-sdk/MsgWithdrawDelegationReward",
           value: {
             delegator_addr: item.delegator_addr,
-            validator_addr: item.validator_addr
-          }
+            validator_addr: item.validator_addr,
+          },
         };
       });
 
-      this.$emit('generated-messages', txMessage);
-    }
+      this.$emit("generated-messages", txMessage);
+    },
   },
   async beforeMount() {
     try {
@@ -78,14 +78,18 @@ export default {
         `${LCD}/distribution/${this.delegatorAddress}/rewards`
       );
 
-      const rewarded = await response.data.total[0].amount;
+      const rewarded = await response.data.total;
 
-      this.rewards = parseFloat(rewarded / DIVISOR).toFixed(5);
+      if (rewarded.length > 0) {
+        this.rewards = parseFloat(rewarded[0].amount / DIVISOR).toFixed(
+          5
+        );
+      }
 
       this.loading = false;
     } catch (error) {
       this.error = error;
     }
-  }
+  },
 };
 </script>

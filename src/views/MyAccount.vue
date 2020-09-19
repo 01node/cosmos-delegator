@@ -2,7 +2,7 @@
   <div>
     <div
       class="home"
-      v-if="!ledger || this.ledger.connected === false || (ledger && address.bech32 === undefined)"
+      v-if="!ledger || this.ledger.connected === false || (ledger && address.bech32_address === undefined)"
     >
       <div class="page-header">
         <img src="@/assets/blob.png" class="path" />
@@ -28,12 +28,19 @@
                 <i class="fas fa-5x fa-atom fa-spin"></i>
               </div>
               <div>Please connect your Ledger Device to continue</div>
-
+              <button class="btn btn-primary" @click="connect">Retry connection</button>
               <div v-if="errorMessage" class="text-center mt-5">
                 <div class="alert alert-danger" v-text="errorMessage"></div>
 
                 <button class="btn btn-primary" @click="connect">Retry connection</button>
               </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-md-6 mx-auto">
+              <ul id="ledger-status">
+                <li v-for="item in ledgerStatus" :key="item.index">{{ item.msg }}</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -49,28 +56,28 @@
         <div class="row">
           <div class="col-12 mb-4">
             <h1 class="title mb-0">My Account</h1>
-            <i v-if="address.bech32 === undefined" class="fa fa-spin fa-atom fa-2x"></i>
+            <i v-if="address.bech32_address === undefined" class="fa fa-spin fa-atom fa-2x"></i>
             <h4 class="subtitle m-0" v-else>
-              <span v-text="address.bech32" class="mr-2"></span>
+              <span v-text="address.bech32_address" class="mr-2"></span>
               <i class="fas fa-copy"></i>
             </h4>
           </div>
           <!-- BALANCES + REWARDS -->
-          <div class="col-12 col-md-4" v-if="address.bech32">
-            <my-balances :delegatorAddress="address.bech32" />
-             <my-rewards
-              :delegatorAddress="address.bech32"
+          <div class="col-12 col-md-4" v-if="address.bech32_address">
+            <my-balances :delegatorAddress="address.bech32_address" />
+            <my-rewards
+              :delegatorAddress="address.bech32_address"
               @generated-messages="handleGeneratedMessages"
             />
           </div>
           <!-- /BALANCES -->
           <!-- DELEGATIONS + TRANSACTIONS -->
-           <div class="col-12 col-md-8" v-if="address.bech32 && txMessages.length === 0">
+          <div class="col-12 col-md-8" v-if="address.bech32_address && txMessages.length === 0">
             <my-delegations
-              :delegatorAddress="address.bech32"
+              :delegatorAddress="address.bech32_address"
               @generated-messages="handleGeneratedMessages"
             />
-            <my-transactions :delegatorAddress="address.bech32" />
+            <my-transactions :delegatorAddress="address.bech32_address" />
           </div>
           <!-- /DELEGATIONS -->
 
@@ -114,24 +121,30 @@
 
 <script>
 /* tslint:disable-next-line */
-import IrisDelegateTool from '@/utils/iris-delegation-tool';
-import { DENOM, REALDENOM, DIVISOR, LCD, CHAIN_ID } from '@/utils/helpers';
-import { signatureImport } from 'secp256k1';
-import * as wallet from '@/utils/cosmos-wallet';
+import { DENOM, REALDENOM, DIVISOR, LCD, CHAIN_ID } from "@/utils/helpers";
+import { signatureImport } from "secp256k1";
+import * as wallet from "@/utils/cosmos-wallet";
+import CosmosApp from "ledger-cosmos-js";
 
-import MyBalances from '@/components/MyAccount/MyBalances.vue';
-import MyDelegations from '@/components/MyAccount/MyDelegations.vue';
-import MyRewards from '@/components/MyAccount/MyRewards.vue';
-import MyTransactions from '@/components/MyAccount/MyTransactions.vue';
+// eslint-disable-next-line import/no-extraneous-dependencies
+// eslint-disable-next-line no-unused-vars
+import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import TransportU2F from "@ledgerhq/hw-transport-u2f";
+import { ERROR_CODE } from "@/utils/common";
+import MyBalances from "@/components/MyAccount/MyBalances.vue";
+import MyDelegations from "@/components/MyAccount/MyDelegations.vue";
+import MyRewards from "@/components/MyAccount/MyRewards.vue";
+import MyTransactions from "@/components/MyAccount/MyTransactions.vue";
 
 const DEFAULT_FEE = 0.3;
-const HDPATH = [44, 118, 0, 0, 0];
+const HDPATH = [44, 118, 5, 0, 3];
 const DEFAULT_GAS = 150000;
 const DEFAULT_GAS_PRICE = 0.025;
 const RPC_ADDRESS = LCD;
 
 export default {
-  name: 'my-account',
+  name: "my-account",
   data() {
     return {
       DENOM,
@@ -145,45 +158,76 @@ export default {
       delegateError: null,
       txMessages: [],
       txMessage: null,
-      type: 'normal'
+      type: "normal",
+      deviceLog: [],
+      transportChoice: "WebUSB",
     };
   },
   components: { MyBalances, MyDelegations, MyRewards, MyTransactions },
+  computed: {
+    ledgerStatus() {
+      return this.deviceLog;
+    },
+  },
   methods: {
-    async init() {
-      this.ledger = new IrisDelegateTool();
-      this.ledger.transportDebug = true;
-      this.ledger.checkAppInfo = true;
-      this.ledger.setNodeURL(RPC_ADDRESS);
-
-      try {
-        this.connect();
-      } catch (error) {
-        //console.log(error);
-        this.errorMessage = error;
+    log(msg) {
+      this.deviceLog.push({
+        index: this.deviceLog.length,
+        msg,
+      });
+    },
+    async getTransport() {
+      let transport = null;
+      this.log(`Trying to connect via ${this.transportChoice}...`);
+      if (this.transportChoice === "WebUSB") {
+        try {
+          transport = await TransportWebUSB.create();
+        } catch (e) {
+          this.log(e);
+        }
       }
+      if (this.transportChoice === "U2F") {
+        try {
+          transport = await TransportU2F.create(10000);
+        } catch (e) {
+          this.log(e);
+        }
+      }
+      return transport;
+    },
+    async init() {
+      this.deviceLog = [];
+      const transport = await this.getTransport();
+      this.ledger = new CosmosApp(transport);
+
+      let response = await this.ledger.getVersion();
+      if (response.return_code !== ERROR_CODE.NoError) {
+        this.log(`Error [${response.return_code}] ${response.error_message}`);
+        return;
+      }
+      this.log("Response received!");
+      this.log(
+        `App Version ${response.major}.${response.minor}.${response.patch}`
+      );
+      this.log(`Device locked: ${response.device_locked}`);
+      this.ledger.connected = !response.device_locked;
+
+        // now it is possible to access all commands in the app
+      response = await this.ledger.getAddressAndPubKey(HDPATH, "iaa");
+      if (response.return_code !== 0x9000) {
+        this.log(`Error [${response.return_code}] ${response.error_message}`);
+        return;
+      }
+
+      this.address = {
+        ...response
+      }
+
+      this.log(`Ledger address: ${this.address.bech32_address}`);
     },
 
     async connect() {
-      this.errorMessage = null;
-      try {
-        await this.ledger.connect();
-        this.ledger.appDetails = await this.ledger.app.appInfo();
-
-        try {
-          await this.checkAddress();
-        } catch (error) {
-          this.errorMessage = error;
-        }
-
-        try {
-          await this.getAccountInfo();
-        } catch (error) {
-          this.errorMessage = error;
-        }
-      } catch (error) {
-        this.errorMessage = error;
-      }
+      await this.init();
     },
     async checkAddress() {
       if (this.ledger.connected === true) {
@@ -203,11 +247,13 @@ export default {
         try {
           this.accountInfo = await this.ledger.getAccountInfo(this.address);
         } catch (error) {
-          this.errorMessage = 'Ledger connection has been lost. Check your Ledger device.';
+          this.errorMessage =
+            "Ledger connection has been lost. Check your Ledger device.";
           //throw new Error(error);
         }
       } else {
-        this.errorMessage = 'Ledger connection has been lost. Check your Ledger device.';
+        this.errorMessage =
+          "Ledger connection has been lost. Check your Ledger device.";
       }
     },
     async injectTransaction() {
@@ -217,9 +263,9 @@ export default {
       this.confirmed = false;
       this.waitConfirm = true;
 
-      const response = await fetch(RPC_ADDRESS + '/txs', {
-        method: 'POST',
-        body: this.txData
+      const response = await fetch(RPC_ADDRESS + "/txs", {
+        method: "POST",
+        body: this.txData,
       });
 
       const data = await response.json();
@@ -248,13 +294,16 @@ export default {
     },
 
     async signTransaction() {
-      var signMessage = wallet.createSignMessage(this.txMessage, this.requestMetaData);
+      var signMessage = wallet.createSignMessage(
+        this.txMessage,
+        this.requestMetaData
+      );
 
       try {
-        const pubKeyBuffer = Buffer.from(this.address.pk, 'hex');
+        const pubKeyBuffer = Buffer.from(this.address.pk, "hex");
         const ledgerSignature = await this.ledger.app.sign(HDPATH, signMessage);
 
-        console.log('ledger signature code', ledgerSignature.return_code);
+        console.log("ledger signature code", ledgerSignature.return_code);
         if (ledgerSignature.return_code === 36864) {
           const signature = wallet.createSignature(
             signatureImport(ledgerSignature.signature),
@@ -271,7 +320,7 @@ export default {
           this.txData = null;
         }
       } catch ({ message, statusCode }) {
-        console.error('Error signing transaction', message, statusCode);
+        console.error("Error signing transaction", message, statusCode);
       }
     },
     async handleGeneratedMessages(payload) {
@@ -282,26 +331,26 @@ export default {
           amount: [
             {
               denom: REALDENOM,
-              amount: String(DEFAULT_GAS * DEFAULT_GAS_PRICE * 3)
-            }
+              amount: String(DEFAULT_GAS * DEFAULT_GAS_PRICE * 3),
+            },
           ],
-          gas: String(DEFAULT_GAS * 3)
+          gas: String(DEFAULT_GAS * 3),
         },
         signature: null,
-        memo: 'Stake online using delegate.01node.com'
+        memo: "Stake online using delegate.01node.com",
       };
 
       let txMessage = defaultTx;
 
-      txMessage['msg'] = this.txMessages;
+      txMessage["msg"] = this.txMessages;
 
       const requestMetaData = {
         sequence: String(this.accountInfo.sequence),
-        from: this.address.bech32,
+        from: this.address.bech32_address,
         account_number: String(this.accountInfo.accountNumber),
         chain_id: CHAIN_ID,
         fees: String(DEFAULT_GAS * DEFAULT_GAS_PRICE),
-        generate_only: false
+        generate_only: false,
       };
 
       // Save TX data to state
@@ -310,24 +359,21 @@ export default {
       this.requestMetaData = requestMetaData;
       this.txData = null;
       this.error = null;
-      this.delegateInfo = 'Please sign transaction on Legder';
+      this.delegateInfo = "Please sign transaction on Legder";
 
-      console.log('generated tx..');
+      console.log("generated tx..");
 
       // Sign TX
       await this.signTransaction();
       this.delegateInfo = null;
-      console.log('tx signed... now trying to inject');
+      console.log("tx signed... now trying to inject");
 
       if (this.txData !== null) {
         await this.injectTransaction();
-        console.log('successfully injected');
+        console.log("successfully injected");
       }
-    }
+    },
   },
-  async mounted() {
-    await this.init();
-  }
 };
 </script>
 
